@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="35%" r="75%">
+      <stop offset="0" stop-color="#1d2650"/>
+      <stop offset="1" stop-color="#0b0f1e"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#fff3cf"/>
+      <stop offset="1" stop-color="#f2d88a"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <g stroke="#e8c46a" stroke-opacity=".35" stroke-width="5" stroke-dasharray="10 14">
+    <line x1="512" y1="512" x2="512" y2="170"/><line x1="512" y1="512" x2="808" y2="341"/>
+    <line x1="512" y1="512" x2="808" y2="683"/><line x1="512" y1="512" x2="512" y2="854"/>
+    <line x1="512" y1="512" x2="216" y2="683"/><line x1="512" y1="512" x2="216" y2="341"/>
+  </g>
+  <g stroke-width="8">
+    <line x1="512" y1="170" x2="808" y2="341" stroke="#9fc3dc" stroke-opacity=".55"/>
+    <line x1="216" y1="683" x2="512" y2="854" stroke="#e7a0b5" stroke-opacity=".55"/>
+  </g>
+  <circle cx="512" cy="170" r="46" fill="#3f86b3" stroke="#d3e6f2" stroke-width="8"/>
+  <circle cx="808" cy="341" r="40" fill="#c34a72" stroke="#f9d3db" stroke-width="8"/>
+  <circle cx="808" cy="683" r="40" fill="#4f9a49" stroke="#d8ebd3" stroke-width="8"/>
+  <circle cx="512" cy="854" r="46" fill="#c36c2c" stroke="#fbdbc1" stroke-width="8"/>
+  <circle cx="216" cy="683" r="40" fill="#8761b3" stroke="#e6daef" stroke-width="8"/>
+  <circle cx="216" cy="341" r="40" fill="#34918a" stroke="#d1ebe8" stroke-width="8"/>
+  <circle cx="512" cy="512" r="200" fill="url(#core)" stroke="#8c640f" stroke-width="12"/>
+  <path d="M512 400l33 67 74 11-54 52 13 73-66-35-66 35 13-73-54-52 74-11z" fill="#8c640f"/>
+</svg>

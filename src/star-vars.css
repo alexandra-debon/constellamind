@@ -1,0 +1,118 @@
+/* Star colours of the colour edition of the notebook; the black & white edition greys them out. */
+:root {
+  --s1-ink: #2f698c;
+  --s1-soft: #d3e6f2;
+  --s2-ink: #a83659;
+  --s2-soft: #f9d3db;
+  --s3-ink: #3f793a;
+  --s3-soft: #d8ebd3;
+  --s4-ink: #a8561f;
+  --s4-soft: #fbdbc1;
+  --s5-ink: #69498c;
+  --s5-soft: #e6daef;
+  --s6-ink: #2a7069;
+  --s6-soft: #d1ebe8;
+  --s7-ink: #9a4936;
+  --s7-soft: #f6d6c8;
+  --s8-ink: #3d4f95;
+  --s8-soft: #dbe2f6;
+  --s9-ink: #59792d;
+  --s9-soft: #e2efc8;
+  --s10-ink: #6e5236;
+  --s10-soft: #efdfcf;
+  --s11-ink: #8e3f79;
+  --s11-soft: #f4d4eb;
+  --s12-ink: #4f5d6e;
+  --s12-soft: #e1e6eb;
+}
+/* Night sky: lighter inks, deep translucent fills. */
+[data-mode='dark'] {
+  --s1-ink: color-mix(in srgb, #2f698c 55%, #ffffff);
+  --s1-soft: color-mix(in srgb, #2f698c 38%, #141a2e);
+  --s2-ink: color-mix(in srgb, #a83659 55%, #ffffff);
+  --s2-soft: color-mix(in srgb, #a83659 38%, #141a2e);
+  --s3-ink: color-mix(in srgb, #3f793a 55%, #ffffff);
+  --s3-soft: color-mix(in srgb, #3f793a 38%, #141a2e);
+  --s4-ink: color-mix(in srgb, #a8561f 55%, #ffffff);
+  --s4-soft: color-mix(in srgb, #a8561f 38%, #141a2e);
+  --s5-ink: color-mix(in srgb, #69498c 55%, #ffffff);
+  --s5-soft: color-mix(in srgb, #69498c 38%, #141a2e);
+  --s6-ink: color-mix(in srgb, #2a7069 55%, #ffffff);
+  --s6-soft: color-mix(in srgb, #2a7069 38%, #141a2e);
+  --s7-ink: color-mix(in srgb, #9a4936 55%, #ffffff);
+  --s7-soft: color-mix(in srgb, #9a4936 38%, #141a2e);
+  --s8-ink: color-mix(in srgb, #3d4f95 55%, #ffffff);
+  --s8-soft: color-mix(in srgb, #3d4f95 38%, #141a2e);
+  --s9-ink: color-mix(in srgb, #59792d 55%, #ffffff);
+  --s9-soft: color-mix(in srgb, #59792d 38%, #141a2e);
+  --s10-ink: color-mix(in srgb, #6e5236 55%, #ffffff);
+  --s10-soft: color-mix(in srgb, #6e5236 38%, #141a2e);
+  --s11-ink: color-mix(in srgb, #8e3f79 55%, #ffffff);
+  --s11-soft: color-mix(in srgb, #8e3f79 38%, #141a2e);
+  --s12-ink: color-mix(in srgb, #4f5d6e 55%, #ffffff);
+  --s12-soft: color-mix(in srgb, #4f5d6e 38%, #141a2e);
+}
+[data-theme='bw'] {
+  --s1-ink: #2b2b2b;
+  --s1-soft: #ececec;
+  --s2-ink: #2b2b2b;
+  --s2-soft: #ececec;
+  --s3-ink: #2b2b2b;
+  --s3-soft: #ececec;
+  --s4-ink: #2b2b2b;
+  --s4-soft: #ececec;
+  --s5-ink: #2b2b2b;
+  --s5-soft: #ececec;
+  --s6-ink: #2b2b2b;
+  --s6-soft: #ececec;
+  --s7-ink: #2b2b2b;
+  --s7-soft: #ececec;
+  --s8-ink: #2b2b2b;
+  --s8-soft: #ececec;
+  --s9-ink: #2b2b2b;
+  --s9-soft: #ececec;
+  --s10-ink: #2b2b2b;
+  --s10-soft: #ececec;
+  --s11-ink: #2b2b2b;
+  --s11-soft: #ececec;
+  --s12-ink: #2b2b2b;
+  --s12-soft: #ececec;
+}
+[data-theme='bw'][data-mode='dark'] {
+  --s1-ink: #e6e6e6;
+  --s1-soft: #262b3b;
+  --s2-ink: #e6e6e6;
+  --s2-soft: #262b3b;
+  --s3-ink: #e6e6e6;
+  --s3-soft: #262b3b;
+  --s4-ink: #e6e6e6;
+  --s4-soft: #262b3b;
+  --s5-ink: #e6e6e6;
+  --s5-soft: #262b3b;
+  --s6-ink: #e6e6e6;
+  --s6-soft: #262b3b;
+  --s7-ink: #e6e6e6;
+  --s7-soft: #262b3b;
+  --s8-ink: #e6e6e6;
+  --s8-soft: #262b3b;
+  --s9-ink: #e6e6e6;
+  --s9-soft: #262b3b;
+  --s10-ink: #e6e6e6;
+  --s10-soft: #262b3b;
+  --s11-ink: #e6e6e6;
+  --s11-soft: #262b3b;
+  --s12-ink: #e6e6e6;
+  --s12-soft: #262b3b;
+}
+[data-star="1"] { --ink: var(--s1-ink); --soft: var(--s1-soft); }
+[data-star="2"] { --ink: var(--s2-ink); --soft: var(--s2-soft); }
+[data-star="3"] { --ink: var(--s3-ink); --soft: var(--s3-soft); }
+[data-star="4"] { --ink: var(--s4-ink); --soft: var(--s4-soft); }
+[data-star="5"] { --ink: var(--s5-ink); --soft: var(--s5-soft); }
+[data-star="6"] { --ink: var(--s6-ink); --soft: var(--s6-soft); }
+[data-star="7"] { --ink: var(--s7-ink); --soft: var(--s7-soft); }
+[data-star="8"] { --ink: var(--s8-ink); --soft: var(--s8-soft); }
+[data-star="9"] { --ink: var(--s9-ink); --soft: var(--s9-soft); }
+[data-star="10"] { --ink: var(--s10-ink); --soft: var(--s10-soft); }
+[data-star="11"] { --ink: var(--s11-ink); --soft: var(--s11-soft); }
+[data-star="12"] { --ink: var(--s12-ink); --soft: var(--s12-soft); }

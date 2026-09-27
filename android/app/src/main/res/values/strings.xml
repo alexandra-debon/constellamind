@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ConstellaMind</string>
+    <string name="title_activity_main">ConstellaMind</string>
+    <string name="package_name">com.whisperandmap.constellamind</string>
+    <string name="custom_url_scheme">com.whisperandmap.constellamind</string>
+</resources>
