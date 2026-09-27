@@ -33,7 +33,8 @@ Trois principes : **chaque idée a une adresse** (É3.2 = étoile 3, satellite 2
 - **Nuit étoilée** (mode sombre) ou papier, automatique selon le système.
 - **Français / English** (édition COTA, adresses S3.2) et **Couleur / Noir & blanc** (pour les tablettes e-ink comme reMarkable ou Paper Pro).
 - Sauvegarde automatique sur l'appareil (fichiers privés de l'app sur iOS et Android), export par la feuille de partage et import d'un fichier `.json`.
-- Aucun compte, aucune publicité, aucune donnée collectée ([politique de confidentialité](public/privacy.html)).
+- Aucune publicité, aucun traçage, compte facultatif ([confidentialité](public/privacy.html), [conditions](public/terms.html)).
+- **Premium** (4,99 €/mois ou 39,99 €/an) : constellations illimitées, synchronisation entre appareils, export PDF et image, surligneur. Achats App Store, Google Play et web réunis par RevenueCat, comptes et synchro sur Supabase. Mise en place : **[docs/ABONNEMENTS.md](docs/ABONNEMENTS.md)**.
 
 ## Développer
 

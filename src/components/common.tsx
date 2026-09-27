@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { isStar, pairKey, parseAddress, SATS, STARS, STATUSES, type Status } from '../model';
 import { hasPen } from '../ink';
+import { usePremium } from '../account';
+import { CLOSE, segments, toggleHighlight } from '../highlight';
 import { useStore } from '../store';
 import { Icon } from './icons';
 import { InkCanvas } from './Ink';
@@ -32,6 +34,8 @@ export function TopNav({ active }: { active: string }) {
     ['actions', t.nav.actions, 'actions'],
     ['notes', t.nav.notes, 'notes'],
     ['methode', t.nav.method, 'method'],
+    ['constellations', t.docs.title, 'layers'],
+    ['compte', t.account.title, 'user'],
   ];
   // Phone tab bar keeps the four daily destinations; the rest lives under "More".
   const primary = new Set(['', 'nebuleuse', 'actions', 'passerelles']);
@@ -158,28 +162,70 @@ export function Lined({
   onChange,
   rows = 3,
   placeholder,
+  highlight = false,
 }: {
   value: string;
   onChange: (v: string) => void;
   rows?: number;
   placeholder?: string;
+  /** Offer the (premium) highlighter on selected text. */
+  highlight?: boolean;
 }) {
+  const { t } = useStore();
+  const { premium, require } = usePremium();
   const ref = useRef<HTMLTextAreaElement>(null);
+  const [sel, setSel] = useState<{ start: number; end: number } | null>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight + 2}px`;
   }, [value]);
+
+  const trackSelection = () => {
+    const el = ref.current;
+    if (!el) return;
+    setSel(el.selectionStart !== el.selectionEnd ? { start: el.selectionStart, end: el.selectionEnd } : null);
+  };
+
+  const applyHighlight = () => {
+    if (!sel || !require('highlight')) return;
+    const next = toggleHighlight(value, sel.start, sel.end);
+    onChange(next.text);
+    requestAnimationFrame(() => {
+      ref.current?.setSelectionRange(next.start, next.end);
+      trackSelection();
+    });
+  };
+
+  const inHighlight = sel ? segments(value.slice(0, sel.end)).some((g) => g.marked) && value.slice(sel.start, sel.end).indexOf(CLOSE) < 0 : false;
+
   return (
-    <textarea
-      ref={ref}
-      className="lined"
-      rows={rows}
-      value={value}
-      placeholder={placeholder}
-      onChange={(e) => onChange(e.target.value)}
-    />
+    <div className="lined-wrap">
+      <div className="lined lined-backdrop" aria-hidden="true">
+        {segments(value).map((g, i) => (g.marked ? <mark key={i}>{g.text}</mark> : <span key={i}>{g.text}</span>))}
+        {'\n'}
+      </div>
+      <textarea
+        ref={ref}
+        className="lined lined-input"
+        rows={rows}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        onSelect={trackSelection}
+        onKeyUp={trackSelection}
+        onMouseUp={trackSelection}
+        onTouchEnd={() => window.setTimeout(trackSelection, 0)}
+        onBlur={() => window.setTimeout(() => setSel(null), 150)}
+      />
+      {highlight && sel && (
+        <button type="button" className="hl-btn" onMouseDown={(e) => e.preventDefault()} onClick={applyHighlight}>
+          <Icon name="marker" size={16} /> {inHighlight ? t.unhighlight : t.highlight}
+          {!premium && <span className="pro">PRO</span>}
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -355,7 +401,7 @@ export function WriteField({
         </button>
       </div>
       {mode === 'keyboard' ? (
-        <Lined value={value} onChange={onChange} rows={rows} placeholder={placeholder} />
+        <Lined value={value} onChange={onChange} rows={rows} placeholder={placeholder} highlight />
       ) : (
         <InkCanvas inkKey={inkKey} minHeight={minH} />
       )}

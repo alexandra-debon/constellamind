@@ -42,7 +42,7 @@ Dans Xcode :
 Dans [App Store Connect](https://appstoreconnect.apple.com) :
 1. **Mes apps → +** → nouvelle app, identifiant `com.whisperandmap.constellamind`.
 2. Remplissez la fiche avec les textes de [`docs/FICHE-STORES.md`](FICHE-STORES.md).
-3. **Confidentialité** : « Aucune donnée collectée ». URL de la politique : `https://alexandra-debon.github.io/constellamind/privacy.html`.
+3. **Confidentialité** : déclarer *Adresse e-mail*, *Autre contenu utilisateur* et *Historique d'achats*, liés à l'utilisateur, pour le *fonctionnement de l'app*, sans suivi. URL de la politique : `https://alexandra-debon.github.io/constellamind/privacy.html`. Abonnements : voir [ABONNEMENTS.md](ABONNEMENTS.md).
 4. Captures d'écran : iPhone 6,9" **et** iPad 13" (l'app étant pour iPad, elles sont obligatoires).
 5. Choisissez le build envoyé depuis Xcode → **Soumettre pour vérification**.
 
@@ -90,7 +90,7 @@ Le fichier produit : `android/app/build/outputs/bundle/release/app-release.aab`.
 
 1. **Créer une application** → ConstellaMind, gratuite.
 2. Fiche du Store : textes de [`docs/FICHE-STORES.md`](FICHE-STORES.md), icône 512 px (`assets/icon-only.png`), image de présentation 1024 × 500, captures téléphone et tablette.
-3. **Sécurité des données** : aucune donnée collectée ni partagée. Politique : `https://alexandra-debon.github.io/constellamind/privacy.html`.
+3. **Sécurité des données** : e-mail, contenu créé par l'utilisateur et historique d'achats collectés (fonctionnement de l'app, chiffrés en transit, suppression possible), rien de partagé. Politique : `https://alexandra-debon.github.io/constellamind/privacy.html`.
 4. Classification du contenu (questionnaire) → « Tout public ».
 5. **Tests → Test fermé** (obligatoire pour un nouveau compte personnel), puis **Production** → importer le `.aab` → envoyer pour examen.
 
