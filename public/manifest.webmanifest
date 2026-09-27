@@ -1,0 +1,9 @@
+{
+  "name": "ConstellaMind — méthode NÉSO",
+  "short_name": "ConstellaMind",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fffdf7",
+  "theme_color": "#8c640f",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
