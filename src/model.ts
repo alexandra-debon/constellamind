@@ -32,6 +32,8 @@ export interface Satellite {
 export interface Shard {
   id: string;
   text: string;
+  /** True when the shard was handwritten (ink stored under `shard:<id>`). */
+  ink?: boolean;
   address: string;
   createdAt: string;
 }
@@ -59,7 +61,13 @@ export interface Bridge {
 
 export interface Settings {
   lang: 'fr' | 'en';
+  /** Colour edition or black & white edition (e-ink tablets). */
   theme: 'color' | 'bw';
+  /** Light paper, night sky, or follow the system. */
+  appearance: 'system' | 'light' | 'dark';
+  /** Default writing mode for new fields. */
+  writing: 'auto' | 'keyboard' | 'pen';
+  onboarded: boolean;
 }
 
 export interface Constellation {
@@ -114,7 +122,13 @@ export function emptyConstellation(): Constellation {
     matrixInsight: '',
     notes: '',
     rules: '',
-    settings: { lang: 'fr', theme: 'color' },
+    settings: {
+      lang: navigator.language?.toLowerCase().startsWith('fr') ? 'fr' : 'en',
+      theme: 'color',
+      appearance: 'system',
+      writing: 'auto',
+      onboarded: false,
+    },
   };
 }
 

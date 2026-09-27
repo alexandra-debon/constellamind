@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { isStar, pairKey, parseAddress, SATS, STARS, STATUSES, type Status } from '../model';
+import { hasPen } from '../ink';
 import { useStore } from '../store';
+import { Icon } from './icons';
+import { InkCanvas } from './Ink';
 
 export const hrefOf = (addr: string) => (isStar(addr) ? `#/etoile/${addr}` : `#/satellite/${addr}`);
 
@@ -20,27 +23,65 @@ export function StarIcon({ size = 16, filled = true }: { size?: number; filled?:
 
 export function TopNav({ active }: { active: string }) {
   const { t } = useStore();
-  const tabs: [string, string][] = [
-    ['nebuleuse', t.nav.nebula],
-    ['passerelles', t.nav.bridges],
-    ['matrice', t.nav.matrix],
-    ['actions', t.nav.actions],
-    ['notes', t.nav.notes],
-    ['methode', t.nav.method],
+  const [sheet, setSheet] = useState(false);
+  const items: [string, string, string][] = [
+    ['', t.nav.core, 'star'],
+    ['nebuleuse', t.nav.nebula, 'nebula'],
+    ['passerelles', t.nav.bridges, 'bridges'],
+    ['matrice', t.nav.matrix, 'matrix'],
+    ['actions', t.nav.actions, 'actions'],
+    ['notes', t.nav.notes, 'notes'],
+    ['methode', t.nav.method, 'method'],
   ];
+  // Phone tab bar keeps the four daily destinations; the rest lives under "More".
+  const primary = new Set(['', 'nebuleuse', 'actions', 'passerelles']);
+  const secondaryActive = !primary.has(active);
+  const label = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
+
   return (
-    <nav className="topnav">
-      <a className={`tab core ${active === '' ? 'on' : ''}`} href="#/">
-        <StarIcon size={18} /> {t.nav.core}
-      </a>
-      <div className="tabs">
-        {tabs.map(([k, label]) => (
-          <a key={k} className={`tab t-${k} ${active === k ? 'on' : ''}`} href={`#/${k}`}>
-            {label}
+    <>
+      <nav className="rail" aria-label="Navigation">
+        <a href="#/" className="rail-logo" aria-label="ConstellaMind">
+          <StarIcon size={26} />
+        </a>
+        {items.map(([k, lbl, icon]) => (
+          <a key={k} href={`#/${k}`} className={`rail-item n-${k || 'core'} ${active === k ? 'on' : ''}`}>
+            <Icon name={icon} size={22} />
+            <span>{label(lbl)}</span>
           </a>
         ))}
-      </div>
-    </nav>
+      </nav>
+
+      <nav className="tabbar" aria-label="Navigation">
+        {items
+          .filter(([k]) => primary.has(k))
+          .map(([k, lbl, icon]) => (
+            <a key={k} href={`#/${k}`} className={`tab-item n-${k || 'core'} ${active === k ? 'on' : ''}`}>
+              <Icon name={icon} size={22} />
+              <span>{label(lbl)}</span>
+            </a>
+          ))}
+        <button type="button" className={`tab-item ${secondaryActive ? 'on' : ''}`} onClick={() => setSheet(true)}>
+          <Icon name="more" size={22} />
+          <span>{t.more}</span>
+        </button>
+      </nav>
+
+      {sheet && (
+        <div className="sheet-backdrop" onClick={() => setSheet(false)}>
+          <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="sheet-handle" />
+            {items
+              .filter(([k]) => !primary.has(k))
+              .map(([k, lbl, icon]) => (
+                <a key={k} href={`#/${k}`} className={`sheet-item n-${k}`} onClick={() => setSheet(false)}>
+                  <Icon name={icon} size={22} /> {label(lbl)}
+                </a>
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -271,3 +312,53 @@ export function BottomLinks() {
   );
 }
 
+
+/**
+ * A writing field offering both keyboard text and handwriting. The two contents
+ * are kept side by side; the toggle only chooses which one you are working on.
+ */
+export function WriteField({
+  value,
+  onChange,
+  inkKey,
+  rows = 3,
+  placeholder,
+  inkHeight,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  inkKey: string;
+  rows?: number;
+  placeholder?: string;
+  inkHeight?: number;
+}) {
+  const { data, inkPage, t } = useStore();
+  const hasInk = !!inkPage(inkKey)?.strokes.length;
+  const [mode, setMode] = useState<'keyboard' | 'pen'>(() => {
+    if (hasInk && !value) return 'pen';
+    if (value && !hasInk) return 'keyboard';
+    const pref = data.settings.writing;
+    return pref === 'pen' || (pref === 'auto' && hasPen()) ? 'pen' : 'keyboard';
+  });
+  const minH = inkHeight ?? Math.max(220, rows * 88);
+
+  return (
+    <div className="write-field">
+      <div className="write-toggle" role="tablist">
+        <button type="button" role="tab" aria-selected={mode === 'keyboard'} className={mode === 'keyboard' ? 'on' : ''} onClick={() => setMode('keyboard')}>
+          <Icon name="keyboard" size={16} /> {t.write.keyboard}
+          {mode === 'pen' && value && <span className="has" title={t.write.hasOther} />}
+        </button>
+        <button type="button" role="tab" aria-selected={mode === 'pen'} className={mode === 'pen' ? 'on' : ''} onClick={() => setMode('pen')}>
+          <Icon name="pen" size={16} /> {t.write.pen}
+          {mode === 'keyboard' && hasInk && <span className="has" title={t.write.hasOther} />}
+        </button>
+      </div>
+      {mode === 'keyboard' ? (
+        <Lined value={value} onChange={onChange} rows={rows} placeholder={placeholder} />
+      ) : (
+        <InkCanvas inkKey={inkKey} minHeight={minH} />
+      )}
+    </div>
+  );
+}

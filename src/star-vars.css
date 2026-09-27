@@ -25,6 +25,33 @@
   --s12-ink: #4f5d6e;
   --s12-soft: #e1e6eb;
 }
+/* Night sky: lighter inks, deep translucent fills. */
+[data-mode='dark'] {
+  --s1-ink: color-mix(in srgb, #2f698c 55%, #ffffff);
+  --s1-soft: color-mix(in srgb, #2f698c 38%, #141a2e);
+  --s2-ink: color-mix(in srgb, #a83659 55%, #ffffff);
+  --s2-soft: color-mix(in srgb, #a83659 38%, #141a2e);
+  --s3-ink: color-mix(in srgb, #3f793a 55%, #ffffff);
+  --s3-soft: color-mix(in srgb, #3f793a 38%, #141a2e);
+  --s4-ink: color-mix(in srgb, #a8561f 55%, #ffffff);
+  --s4-soft: color-mix(in srgb, #a8561f 38%, #141a2e);
+  --s5-ink: color-mix(in srgb, #69498c 55%, #ffffff);
+  --s5-soft: color-mix(in srgb, #69498c 38%, #141a2e);
+  --s6-ink: color-mix(in srgb, #2a7069 55%, #ffffff);
+  --s6-soft: color-mix(in srgb, #2a7069 38%, #141a2e);
+  --s7-ink: color-mix(in srgb, #9a4936 55%, #ffffff);
+  --s7-soft: color-mix(in srgb, #9a4936 38%, #141a2e);
+  --s8-ink: color-mix(in srgb, #3d4f95 55%, #ffffff);
+  --s8-soft: color-mix(in srgb, #3d4f95 38%, #141a2e);
+  --s9-ink: color-mix(in srgb, #59792d 55%, #ffffff);
+  --s9-soft: color-mix(in srgb, #59792d 38%, #141a2e);
+  --s10-ink: color-mix(in srgb, #6e5236 55%, #ffffff);
+  --s10-soft: color-mix(in srgb, #6e5236 38%, #141a2e);
+  --s11-ink: color-mix(in srgb, #8e3f79 55%, #ffffff);
+  --s11-soft: color-mix(in srgb, #8e3f79 38%, #141a2e);
+  --s12-ink: color-mix(in srgb, #4f5d6e 55%, #ffffff);
+  --s12-soft: color-mix(in srgb, #4f5d6e 38%, #141a2e);
+}
 [data-theme='bw'] {
   --s1-ink: #2b2b2b;
   --s1-soft: #ececec;
@@ -50,6 +77,32 @@
   --s11-soft: #ececec;
   --s12-ink: #2b2b2b;
   --s12-soft: #ececec;
+}
+[data-theme='bw'][data-mode='dark'] {
+  --s1-ink: #e6e6e6;
+  --s1-soft: #262b3b;
+  --s2-ink: #e6e6e6;
+  --s2-soft: #262b3b;
+  --s3-ink: #e6e6e6;
+  --s3-soft: #262b3b;
+  --s4-ink: #e6e6e6;
+  --s4-soft: #262b3b;
+  --s5-ink: #e6e6e6;
+  --s5-soft: #262b3b;
+  --s6-ink: #e6e6e6;
+  --s6-soft: #262b3b;
+  --s7-ink: #e6e6e6;
+  --s7-soft: #262b3b;
+  --s8-ink: #e6e6e6;
+  --s8-soft: #262b3b;
+  --s9-ink: #e6e6e6;
+  --s9-soft: #262b3b;
+  --s10-ink: #e6e6e6;
+  --s10-soft: #262b3b;
+  --s11-ink: #e6e6e6;
+  --s11-soft: #262b3b;
+  --s12-ink: #e6e6e6;
+  --s12-soft: #262b3b;
 }
 [data-star="1"] { --ink: var(--s1-ink); --soft: var(--s1-soft); }
 [data-star="2"] { --ink: var(--s2-ink); --soft: var(--s2-soft); }

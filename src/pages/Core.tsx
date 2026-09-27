@@ -1,6 +1,8 @@
-import { useRef, useState, type PointerEvent as RPointerEvent } from 'react';
+import { useRef, useState, type MouseEvent as RMouseEvent, type PointerEvent as RPointerEvent } from 'react';
 import { BottomLinks, hrefOf, StarIcon, TopNav } from '../components/common';
+import { Icon } from '../components/icons';
 import { isValidAddress, pairKey, SATS, STARS } from '../model';
+import { tick } from '../native';
 import { go, useStore } from '../store';
 
 const SIZE = 720;
@@ -33,11 +35,12 @@ const NODES: { addr: string; x: number; y: number; r: number }[] = STARS.flatMap
   ...SATS.map((k) => ({ addr: `${s}.${k}`, ...satPos(s, k), r: SAT_R })),
 ]);
 
-function hit(x: number, y: number) {
+/** Nearest idea to a point; `slop` widens small targets to finger size. */
+function hit(x: number, y: number, slop = 10) {
   let best: { addr: string; d: number } | null = null;
   for (const n of NODES) {
     const d = Math.hypot(n.x - x, n.y - y);
-    if (d <= n.r + 10 && (!best || d < best.d)) best = { addr: n.addr, d };
+    if (d <= Math.max(n.r + 10, slop) && (!best || d < best.d)) best = { addr: n.addr, d };
   }
   return best?.addr ?? null;
 }
@@ -83,6 +86,17 @@ export default function Core() {
     update((d) => {
       if (!d.links.some(([a, b]) => pairKey(a, b) === pairKey(from, to))) d.links.push([from, to]);
     });
+    void tick();
+  };
+
+  // Taps resolve to the nearest idea within ~22 screen pixels, so the small
+  // satellite circles stay easy to hit on a phone.
+  const onTap = (e: RMouseEvent<SVGSVGElement>) => {
+    if (drawMode || (e.target as Element).closest('.link')) return;
+    const p = toSvg(e);
+    const r = svg.current!.getBoundingClientRect();
+    const addr = hit(p.x, p.y, (22 * SIZE) / r.width);
+    if (addr) go(hrefOf(addr));
   };
 
   const removeLink = (a: string, b: string) => {
@@ -97,15 +111,17 @@ export default function Core() {
   return (
     <div className="page">
       <TopNav active="" />
-      <div className="crumbbar">
-        <span className="arrow ghost" />
-        <div className="crumbs">
-          <span className="crumb current core">
-            <StarIcon size={14} /> {t.nav.core}
-          </span>
+      <header className="app-header">
+        <div>
+          <h1>ConstellaMind</h1>
+          <p>
+            {t.methodName} · {t.appTagline}
+          </p>
         </div>
-        <span className="arrow ghost" />
-      </div>
+        <a className="icon-btn" href="#/methode" aria-label={t.settings}>
+          <Icon name="settings" size={22} />
+        </a>
+      </header>
 
       <div className={`sky ${drawMode ? 'drawing' : ''}`}>
         <svg
@@ -115,6 +131,7 @@ export default function Core() {
           onPointerMove={onMove}
           onPointerUp={onUp}
           onPointerCancel={() => setDrag(null)}
+          onClick={onTap}
           role="img"
           aria-label={t.nav.core}
         >
@@ -163,7 +180,7 @@ export default function Core() {
                   const addr = `${s}.${k}`;
                   const sat = data.sats[addr];
                   return (
-                    <a key={k} href={hrefOf(addr)} className="node-link" onClick={(e) => drawMode && e.preventDefault()}>
+                    <g key={k} className="node-link">
                       <line x1={p.x} y1={p.y} x2={q.x} y2={q.y} className="tether" />
                       <circle
                         cx={q.x}
@@ -176,10 +193,10 @@ export default function Core() {
                       <text x={q.x} y={q.y + 4} className="sat-label">
                         {k}
                       </text>
-                    </a>
+                    </g>
                   );
                 })}
-                <a href={hrefOf(String(s))} className="node-link" onClick={(e) => drawMode && e.preventDefault()}>
+                <g className="node-link" role="link" tabIndex={0} aria-label={`${fmt(String(s))} ${star.title}`} onKeyDown={(e) => e.key === 'Enter' && go(hrefOf(String(s)))}>
                   <circle
                     cx={p.x}
                     cy={p.y}
@@ -191,7 +208,7 @@ export default function Core() {
                   <text x={p.x} y={p.y + 6} className="star-label">
                     {fmt(String(s))}
                   </text>
-                </a>
+                </g>
               </g>
             );
           })}

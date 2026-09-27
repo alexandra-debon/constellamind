@@ -3,11 +3,11 @@ import {
   AddressInput,
   Breadcrumb,
   hrefOf,
-  Lined,
   PasserellesBar,
   Section,
   StatusPicker,
   TopNav,
+  WriteField,
 } from '../components/common';
 import { SAT_COUNT, SATS, STAR_COUNT, uid, type Action } from '../model';
 import { useStore } from '../store';
@@ -39,7 +39,7 @@ export function StarPage({ s }: { s: number }) {
       <StatusPicker value={star.status} onChange={(status) => set({ status })} />
 
       <Section title={t.intuition}>
-        <Lined value={star.intuition} rows={3} onChange={(intuition) => set({ intuition })} />
+        <WriteField inkKey={`star:${s}:intuition`} value={star.intuition} rows={3} onChange={(intuition) => set({ intuition })} />
       </Section>
 
       <Section title={t.satellites}>
@@ -68,7 +68,7 @@ export function StarPage({ s }: { s: number }) {
       </div>
 
       <Section title={t.notesLabel}>
-        <Lined value={star.notes} rows={4} onChange={(notes) => set({ notes })} />
+        <WriteField inkKey={`star:${s}:notes`} value={star.notes} rows={4} onChange={(notes) => set({ notes })} />
       </Section>
 
       <PasserellesBar here={addr} />
@@ -146,10 +146,10 @@ export function SatellitePage({ addr }: { addr: string }) {
       <StatusPicker value={sat.status} onChange={(status) => set((x) => (x.status = status))} />
 
       <Section title={t.origin}>
-        <Lined value={sat.origin} rows={2} onChange={(v) => set((x) => (x.origin = v))} />
+        <WriteField inkKey={`sat:${addr}:origin`} value={sat.origin} rows={2} onChange={(v) => set((x) => (x.origin = v))} />
       </Section>
       <Section title={t.development}>
-        <Lined value={sat.development} rows={8} onChange={(v) => set((x) => (x.development = v))} />
+        <WriteField inkKey={`sat:${addr}:dev`} value={sat.development} rows={8} onChange={(v) => set((x) => (x.development = v))} />
       </Section>
 
       <div className="two-col">

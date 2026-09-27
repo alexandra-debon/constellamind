@@ -1,5 +1,9 @@
 import { useRef, useState } from 'react';
-import { AddressInput, Breadcrumb, hrefOf, Lined, Section, TopNav } from '../components/common';
+import { AddressInput, Breadcrumb, hrefOf, Lined, Section, TopNav, WriteField } from '../components/common';
+import { InkCanvas } from '../components/Ink';
+import { Icon } from '../components/icons';
+import { contentHeight, emptyPage, hasPen } from '../ink';
+import { exportFile } from '../persist';
 import { isStar, isValidAddress, NATURES, pairKey, STARS, uid, type Nature } from '../model';
 import { normalize, useStore } from '../store';
 
@@ -7,36 +11,70 @@ const today = () => new Date().toISOString().slice(0, 10);
 
 /* ───────────── NÉBULEUSE ───────────── */
 
+const DRAFT = 'nebula:draft';
+
 export function Nebula() {
-  const { data, update, t, fmt } = useStore();
+  const { data, update, t, fmt, inkPage, setInkPage, ink } = useStore();
   const [text, setText] = useState('');
+  const [mode, setMode] = useState<'keyboard' | 'pen'>(() =>
+    data.settings.writing === 'pen' || (data.settings.writing === 'auto' && hasPen()) ? 'pen' : 'keyboard',
+  );
   const [filter, setFilter] = useState<'all' | 'open' | 'placed'>('all');
   const [copied, setCopied] = useState<string | null>(null);
+  const draft = inkPage(DRAFT);
 
   const capture = () => {
     const v = text.trim();
+    const id = uid();
+    if (mode === 'pen') {
+      if (!draft?.strokes.length) return;
+      setInkPage(`shard:${id}`, { h: contentHeight(draft) + 20, strokes: draft.strokes });
+      setInkPage(DRAFT, null);
+      update((d) => {
+        d.nebula.unshift({ id, text: '', ink: true, address: '', createdAt: new Date().toISOString() });
+      });
+      return;
+    }
     if (!v) return;
     update((d) => {
-      d.nebula.unshift({ id: uid(), text: v, address: '', createdAt: new Date().toISOString() });
+      d.nebula.unshift({ id, text: v, address: '', createdAt: new Date().toISOString() });
     });
     setText('');
   };
 
+  /** Appends a handwritten shard below the existing ink of the target field. */
+  const appendInk = (from: string, to: string) => {
+    const src = ink[from];
+    if (!src?.strokes.length) return;
+    const dst = ink[to] ?? emptyPage();
+    const offset = dst.strokes.length ? contentHeight(dst) + 30 : 10;
+    const top = Math.min(...src.strokes.flatMap((st) => st.p.filter((_, i) => i % 3 === 1)));
+    const moved = src.strokes.map((st) => ({ ...st, p: st.p.map((v, i) => (i % 3 === 1 ? v - top + offset : v)) }));
+    const strokes = [...dst.strokes, ...moved];
+    setInkPage(to, { h: Math.max(dst.h, contentHeight({ h: 0, strokes }) + 120), strokes });
+  };
+
   const copyToIdea = (id: string) => {
+    const shard = data.nebula.find((x) => x.id === id);
+    if (!shard || !isValidAddress(shard.address)) return;
+    const a = shard.address;
+    if (shard.ink) appendInk(`shard:${id}`, isStar(a) ? `star:${a}:intuition` : `sat:${a}:dev`);
     update((d) => {
-      const shard = d.nebula.find((x) => x.id === id);
-      if (!shard || !isValidAddress(shard.address)) return;
-      const a = shard.address;
-      if (isStar(a)) {
-        const s = d.stars[a];
-        if (!s.title) s.title = shard.text.split('\n')[0].slice(0, 80);
-        s.intuition = s.intuition ? `${s.intuition}\n${shard.text}` : shard.text;
-      } else {
-        const s = d.sats[a];
-        if (!s.title) s.title = shard.text.split('\n')[0].slice(0, 80);
-        s.development = s.development ? `${s.development}\n${shard.text}` : shard.text;
+      const sh = d.nebula.find((x) => x.id === id)!;
+      const text = sh.text.trim();
+      const star = d.stars[a.split('.')[0]];
+      if (text) {
+        if (isStar(a)) {
+          const s = d.stars[a];
+          if (!s.title) s.title = text.split('\n')[0].slice(0, 80);
+          s.intuition = s.intuition ? `${s.intuition}\n${text}` : text;
+        } else {
+          const s = d.sats[a];
+          if (!s.title) s.title = text.split('\n')[0].slice(0, 80);
+          s.development = s.development ? `${s.development}\n${text}` : text;
+        }
       }
-      if (!d.stars[a.split('.')[0]].status) d.stars[a.split('.')[0]].status = 'germ';
+      if (!star.status) star.status = 'germ';
     });
     setCopied(id);
     window.setTimeout(() => setCopied(null), 2000);
@@ -45,6 +83,7 @@ export function Nebula() {
   const shards = data.nebula.filter((s) =>
     filter === 'all' ? true : filter === 'open' ? !isValidAddress(s.address) : isValidAddress(s.address),
   );
+  const canCapture = mode === 'pen' ? !!draft?.strokes.length : !!text.trim();
 
   return (
     <div className="page">
@@ -52,22 +91,36 @@ export function Nebula() {
       <Breadcrumb crumbs={[{ label: t.nav.nebula, current: true }]} />
       <p className="intro calm">{t.nebulaIntro}</p>
 
-      <div className="capture">
-        <textarea
-          value={text}
-          rows={3}
-          placeholder={t.nebulaPlaceholder}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-              e.preventDefault();
-              capture();
-            }
-          }}
-        />
-        <button type="button" className="chip strong" onClick={capture} disabled={!text.trim()}>
-          {t.capture}
-        </button>
+      <div className="capture card">
+        <div className="write-toggle" role="tablist">
+          <button type="button" className={mode === 'keyboard' ? 'on' : ''} onClick={() => setMode('keyboard')}>
+            <Icon name="keyboard" size={16} /> {t.write.keyboard}
+          </button>
+          <button type="button" className={mode === 'pen' ? 'on' : ''} onClick={() => setMode('pen')}>
+            <Icon name="pen" size={16} /> {t.write.pen}
+          </button>
+        </div>
+        {mode === 'keyboard' ? (
+          <textarea
+            value={text}
+            rows={3}
+            placeholder={t.nebulaPlaceholder}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                capture();
+              }
+            }}
+          />
+        ) : (
+          <InkCanvas inkKey={DRAFT} minHeight={260} />
+        )}
+        <div className="capture-row">
+          <button type="button" className="btn primary" onClick={capture} disabled={!canCapture}>
+            <Icon name="send" size={18} /> {t.capture}
+          </button>
+        </div>
       </div>
 
       <div className="toolbar">
@@ -83,16 +136,21 @@ export function Nebula() {
         {shards.map((s) => {
           const placed = isValidAddress(s.address);
           return (
-            <li key={s.id} className={`shard ${placed ? 'placed' : ''}`} data-star={placed ? s.address.split('.')[0] : undefined}>
-              <Lined
-                value={s.text}
-                rows={1}
-                onChange={(v) =>
-                  update((d) => {
-                    d.nebula.find((x) => x.id === s.id)!.text = v;
-                  })
-                }
-              />
+            <li key={s.id} className={`shard card ${placed ? 'placed' : ''}`} data-star={placed ? s.address.split('.')[0] : undefined}>
+              <div className="shard-body">
+                {s.ink && <InkCanvas inkKey={`shard:${s.id}`} readOnly />}
+                {(!s.ink || s.text) && (
+                  <Lined
+                    value={s.text}
+                    rows={1}
+                    onChange={(v) =>
+                      update((d) => {
+                        d.nebula.find((x) => x.id === s.id)!.text = v;
+                      })
+                    }
+                  />
+                )}
+              </div>
               <div className="shard-margin">
                 <span className="arrow-to">→</span>
                 <AddressInput
@@ -114,11 +172,12 @@ export function Nebula() {
                   className="x"
                   aria-label={t.remove}
                   title={t.remove}
-                  onClick={() =>
+                  onClick={() => {
+                    if (s.ink) setInkPage(`shard:${s.id}`, null);
                     update((d) => {
                       d.nebula = d.nebula.filter((x) => x.id !== s.id);
-                    })
-                  }
+                    });
+                  }}
                 >
                   ×
                 </button>
@@ -297,7 +356,8 @@ export function Matrix() {
       </div>
 
       <Section title={t.matrixReveals}>
-        <Lined
+        <WriteField
+          inkKey="matrix"
           value={data.matrixInsight}
           rows={4}
           onChange={(v) =>
@@ -319,7 +379,9 @@ export function Notes() {
     <div className="page">
       <TopNav active="notes" />
       <Breadcrumb crumbs={[{ label: t.notesTitle, current: true }]} />
-      <Lined
+      <WriteField
+        inkKey="notes"
+        inkHeight={1200}
         value={data.notes}
         rows={18}
         onChange={(v) =>
@@ -410,24 +472,19 @@ const METHOD_TEXT = {
 };
 
 export function Method() {
-  const { data, update, replace, t } = useStore();
+  const { data, update, replace, ink, t } = useStore();
   const m = METHOD_TEXT[data.settings.lang];
   const file = useRef<HTMLInputElement>(null);
 
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `constellamind-${today()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const exportData = () =>
+    exportFile(`constellamind-${today()}.json`, JSON.stringify({ app: 'constellamind', data, ink }));
 
   const importData = async (f: File) => {
     try {
-      const next = normalize(JSON.parse(await f.text()));
-      if (window.confirm(t.importConfirm)) replace(next);
+      const parsed = JSON.parse(await f.text());
+      // Backups hold { data, ink }; the first web version exported the data alone.
+      const next = normalize(parsed.app === 'constellamind' ? parsed.data : parsed);
+      if (window.confirm(t.importConfirm)) replace(next, parsed.app === 'constellamind' ? parsed.ink ?? {} : undefined);
     } catch {
       window.alert(t.importError);
     }
@@ -497,7 +554,8 @@ export function Method() {
       </Section>
 
       <Section title={t.myRules}>
-        <Lined
+        <WriteField
+          inkKey="rules"
           value={data.rules}
           rows={5}
           onChange={(v) =>
@@ -554,6 +612,41 @@ export function Method() {
               </button>
             ))}
           </div>
+          <div className="field-row">
+            <span className="label">{t.appearance}</span>
+            {(['system', 'light', 'dark'] as const).map((ap) => (
+              <button
+                key={ap}
+                type="button"
+                className={`chip ${data.settings.appearance === ap ? 'on' : ''}`}
+                onClick={() =>
+                  update((d) => {
+                    d.settings.appearance = ap;
+                  })
+                }
+              >
+                {ap === 'system' ? t.appearanceSystem : ap === 'light' ? t.appearanceLight : t.appearanceDark}
+              </button>
+            ))}
+          </div>
+          <div className="field-row">
+            <span className="label">{t.writingMode}</span>
+            {(['auto', 'keyboard', 'pen'] as const).map((w) => (
+              <button
+                key={w}
+                type="button"
+                className={`chip ${data.settings.writing === w ? 'on' : ''}`}
+                onClick={() =>
+                  update((d) => {
+                    d.settings.writing = w;
+                  })
+                }
+              >
+                {w === 'auto' ? t.writingAuto : w === 'keyboard' ? t.writingKeyboard : t.writingPen}
+              </button>
+            ))}
+          </div>
+          <p className="fine">{t.scribbleTip}</p>
           <p className="fine">{t.savedLocally}</p>
           <div className="link-row">
             <button type="button" className="chip" onClick={exportData}>
@@ -579,8 +672,7 @@ export function Method() {
               onClick={() => {
                 if (window.confirm(t.resetConfirm)) {
                   const settings = data.settings;
-                  const fresh = normalize({ version: 1, settings });
-                  replace(fresh);
+                  replace(normalize({ version: 1, settings }), {});
                 }
               }}
             >
@@ -588,6 +680,10 @@ export function Method() {
             </button>
           </div>
         </div>
+      </Section>
+
+      <Section title={t.privacy}>
+        <p className="fine">{t.privacyText}</p>
       </Section>
 
       <footer className="copyright">

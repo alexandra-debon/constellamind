@@ -4,7 +4,8 @@
 *COTA — Constellation-Oriented Thinking Approach*
 
 Une application conçue pour les esprits foisonnants et la pensée en arborescence.
-Elle transpose en app web (iPad, tablette, ordinateur, téléphone) le carnet PDF à liens hypertextes ConstellaMind.
+Elle transpose le carnet PDF à liens hypertextes ConstellaMind en **app iOS (iPhone, iPad), Android et web**.
+On y écrit **au clavier** sur téléphone, ou **à la main** avec l'Apple Pencil ou un stylet sur tablette.
 
 ## La méthode en quatre temps
 
@@ -28,20 +29,32 @@ Trois principes : **chaque idée a une adresse** (É3.2 = étoile 3, satellite 2
 - **Registre des passerelles** : de, vers, nature (P prolonge · O s'oppose · N nourrit · F fusionne · Q questionne), pourquoi, date.
 - **Matrice des étoiles** : 12 × 12, la couleur de la case fonce avec la force du lien.
 - **Notes**, **La méthode** (mode d'emploi, « mes règles de constellation »).
+- **Écriture au clavier ou au stylet** dans chaque champ : pression de l'Apple Pencil ou du S Pen, stylo, surligneur, gomme, annuler et rétablir, rejet de la paume (une fois le stylet détecté, le doigt fait défiler la page). Sur iPad, « Griffonner » (Scribble) convertit aussi l'écriture en texte dans les champs clavier.
+- **Nuit étoilée** (mode sombre) ou papier, automatique selon le système.
 - **Français / English** (édition COTA, adresses S3.2) et **Couleur / Noir & blanc** (pour les tablettes e-ink comme reMarkable ou Paper Pro).
-- Sauvegarde automatique sur l'appareil, avec export et import d'un fichier `.json`.
+- Sauvegarde automatique sur l'appareil (fichiers privés de l'app sur iOS et Android), export par la feuille de partage et import d'un fichier `.json`.
+- Aucun compte, aucune publicité, aucune donnée collectée ([politique de confidentialité](public/privacy.html)).
 
 ## Développer
 
 ```bash
 npm install
-npm run dev      # serveur local
+npm run dev      # serveur local (web)
 npm run build    # version de production dans dist/
+npm run android  # compile, synchronise et ouvre Android Studio
+npm run ios      # compile, synchronise et ouvre Xcode (Mac)
 ```
 
-React 18 + TypeScript + Vite, sans serveur ni compte : les données restent dans le navigateur (localStorage).
+React 18 + TypeScript + Vite, emballé par Capacitor 7 pour iOS et Android. Aucun serveur.
 
-## Mise en ligne
+## Publier sur l'App Store et Google Play
+
+Tout est expliqué pas à pas dans **[docs/PUBLIER.md](docs/PUBLIER.md)**. Les textes des fiches se trouvent dans [docs/FICHE-STORES.md](docs/FICHE-STORES.md).
+
+- Workflow **Android** : à chaque push, il produit un APK de test installable directement, et un `.aab` signé pour Google Play si les secrets de signature sont configurés.
+- Workflow **iOS** : il vérifie que l'app compile sur macOS. L'envoi à Apple se fait depuis Xcode.
+
+## Version web
 
 Le workflow `.github/workflows/deploy.yml` publie l'app sur GitHub Pages à chaque push sur `main`.
 Il faut l'activer une fois : **Settings → Pages → Source : GitHub Actions**.

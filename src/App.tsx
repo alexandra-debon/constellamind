@@ -1,3 +1,4 @@
+import { Onboarding } from './components/Onboarding';
 import { isValidAddress, isStar } from './model';
 import ActionsBoard from './pages/Actions';
 import Core from './pages/Core';
@@ -6,6 +7,15 @@ import { Matrix, Method, Nebula, Notes, Register } from './pages/Others';
 import { useRoute } from './store';
 
 export default function App() {
+  return (
+    <>
+      <Screen />
+      <Onboarding />
+    </>
+  );
+}
+
+function Screen() {
   const [page = '', param = ''] = useRoute();
 
   switch (page) {
