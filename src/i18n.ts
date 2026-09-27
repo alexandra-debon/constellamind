@@ -178,6 +178,10 @@ const fr = {
     writeText: 'Au clavier sur téléphone, à la main avec l’Apple Pencil ou un stylet sur tablette. Chaque champ propose les deux.',
   },
   cancel: 'Annuler',
+  install: {
+    ios: 'Ajoutez ConstellaMind à votre écran d’accueil : touchez Partager, puis « Sur l’écran d’accueil ».',
+    android: 'Ajoutez ConstellaMind à votre écran d’accueil : menu ⋮ du navigateur, puis « Ajouter à l’écran d’accueil ».',
+  },
   prev: 'Précédent',
   next: 'Suivant',
 };
@@ -362,6 +366,10 @@ const en: Dict = {
     writeText: 'With the keyboard on your phone, by hand with Apple Pencil or a stylus on a tablet. Every field offers both.',
   },
   cancel: 'Cancel',
+  install: {
+    ios: 'Add ConstellaMind to your home screen: tap Share, then “Add to Home Screen”.',
+    android: 'Add ConstellaMind to your home screen: browser menu ⋮, then “Add to Home screen”.',
+  },
   prev: 'Previous',
   next: 'Next',
 };

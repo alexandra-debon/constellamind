@@ -2,6 +2,7 @@ import { useRef, useState, type MouseEvent as RMouseEvent, type PointerEvent as 
 import { BottomLinks, hrefOf, StarIcon, TopNav } from '../components/common';
 import { askConfirm } from '../components/confirm';
 import { Icon } from '../components/icons';
+import { InstallHint } from '../components/InstallHint';
 import { isValidAddress, pairKey, SATS, STARS } from '../model';
 import { tick } from '../native';
 import { go, useStore } from '../store';
@@ -123,6 +124,8 @@ export default function Core() {
           <Icon name="settings" size={22} />
         </a>
       </header>
+
+      <InstallHint />
 
       <div className={`sky ${drawMode ? 'drawing' : ''}`}>
         <svg
