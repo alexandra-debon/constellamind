@@ -1,0 +1,2 @@
+# constellamind
+Method COTA / NESO
