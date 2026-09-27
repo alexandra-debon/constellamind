@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { AddressInput, Breadcrumb, hrefOf, Lined, Section, TopNav, WriteField } from '../components/common';
+import { askConfirm, notify } from '../components/confirm';
 import { InkCanvas } from '../components/Ink';
 import { Icon } from '../components/icons';
 import { contentHeight, emptyPage, hasPen } from '../ink';
@@ -484,9 +485,9 @@ export function Method() {
       const parsed = JSON.parse(await f.text());
       // Backups hold { data, ink }; the first web version exported the data alone.
       const next = normalize(parsed.app === 'constellamind' ? parsed.data : parsed);
-      if (window.confirm(t.importConfirm)) replace(next, parsed.app === 'constellamind' ? parsed.ink ?? {} : undefined);
+      if (await askConfirm(t.importConfirm, t.importData, t.cancel)) replace(next, parsed.app === 'constellamind' ? parsed.ink ?? {} : undefined);
     } catch {
-      window.alert(t.importError);
+      void notify(t.importError);
     }
   };
 
@@ -669,8 +670,8 @@ export function Method() {
             <button
               type="button"
               className="chip danger"
-              onClick={() => {
-                if (window.confirm(t.resetConfirm)) {
+              onClick={async () => {
+                if (await askConfirm(t.resetConfirm, t.reset, t.cancel)) {
                   const settings = data.settings;
                   replace(normalize({ version: 1, settings }), {});
                 }

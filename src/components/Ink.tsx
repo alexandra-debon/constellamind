@@ -12,6 +12,7 @@ import {
   type Tool,
 } from '../ink';
 import { tick } from '../native';
+import { askConfirm } from './confirm';
 import { useStore } from '../store';
 import { Icon } from './icons';
 
@@ -296,8 +297,8 @@ export function InkCanvas({ inkKey, readOnly = false, minHeight = 360 }: { inkKe
     setInkPage(inkKey, { h: page.h, strokes: next });
     bump((n) => n + 1);
   };
-  const clear = () => {
-    if (!page.strokes.length || !window.confirm(t.ink.clearConfirm)) return;
+  const clear = async () => {
+    if (!page.strokes.length || !(await askConfirm(t.ink.clearConfirm, t.ink.clear, t.cancel))) return;
     commit([], minHeight);
     void tick();
   };

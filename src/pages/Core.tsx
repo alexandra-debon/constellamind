@@ -1,5 +1,6 @@
 import { useRef, useState, type MouseEvent as RMouseEvent, type PointerEvent as RPointerEvent } from 'react';
 import { BottomLinks, hrefOf, StarIcon, TopNav } from '../components/common';
+import { askConfirm } from '../components/confirm';
 import { Icon } from '../components/icons';
 import { isValidAddress, pairKey, SATS, STARS } from '../model';
 import { tick } from '../native';
@@ -247,8 +248,8 @@ export default function Core() {
           <button
             type="button"
             className="chip ghost"
-            onClick={() => {
-              if (window.confirm(t.clearLinksConfirm))
+            onClick={async () => {
+              if (await askConfirm(t.clearLinksConfirm, t.clearLinks, t.cancel))
                 update((d) => {
                   d.links = [];
                 });

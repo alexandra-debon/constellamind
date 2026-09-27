@@ -177,6 +177,7 @@ const fr = {
     writeTitle: 'Écrivez comme vous pensez',
     writeText: 'Au clavier sur téléphone, à la main avec l’Apple Pencil ou un stylet sur tablette. Chaque champ propose les deux.',
   },
+  cancel: 'Annuler',
   prev: 'Précédent',
   next: 'Suivant',
 };
@@ -360,6 +361,7 @@ const en: Dict = {
     writeTitle: 'Write the way you think',
     writeText: 'With the keyboard on your phone, by hand with Apple Pencil or a stylus on a tablet. Every field offers both.',
   },
+  cancel: 'Cancel',
   prev: 'Previous',
   next: 'Next',
 };
