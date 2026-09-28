@@ -26,6 +26,8 @@ const PATHS: Record<string, string> = {
   moon: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
   share: 'M12 3v12M7 8l5-5 5 5M5 13v7h14v-7',
   send: 'M5 12h14M13 6l6 6-6 6',
+  layers: 'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5',
+  user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0',
 };
 
 export function Icon({ name, size = 20 }: { name: keyof typeof PATHS | string; size?: number }) {

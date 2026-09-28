@@ -11,6 +11,7 @@ import {
   type Stroke,
   type Tool,
 } from '../ink';
+import { usePremium } from '../account';
 import { tick } from '../native';
 import { askConfirm } from './confirm';
 import { useStore } from '../store';
@@ -58,6 +59,7 @@ function Toolbar({ canUndo, canRedo, onUndo, onRedo, onClear }: {
   onClear: () => void;
 }) {
   const { t } = useStore();
+  const { premium, require } = usePremium();
   const s = useTool();
   const colors = s.tool === 'marker' ? MARKER_COLORS : PEN_COLORS;
   const current = s.tool === 'marker' ? s.markerColor : s.penColor;
@@ -67,8 +69,15 @@ function Toolbar({ canUndo, canRedo, onUndo, onRedo, onClear }: {
         <button type="button" className={s.tool === 'pen' ? 'on' : ''} onClick={() => setTool({ tool: 'pen' })} title={t.ink.pen} aria-label={t.ink.pen}>
           <Icon name="pen" />
         </button>
-        <button type="button" className={s.tool === 'marker' ? 'on' : ''} onClick={() => setTool({ tool: 'marker' })} title={t.ink.marker} aria-label={t.ink.marker}>
+        <button
+          type="button"
+          className={s.tool === 'marker' ? 'on' : ''}
+          onClick={() => require('highlight') && setTool({ tool: 'marker' })}
+          title={t.ink.marker}
+          aria-label={t.ink.marker}
+        >
           <Icon name="marker" />
+          {!premium && <span className="pro dot-pro" />}
         </button>
         <button type="button" className={s.tool === 'eraser' ? 'on' : ''} onClick={() => setTool({ tool: 'eraser' })} title={t.ink.eraser} aria-label={t.ink.eraser}>
           <Icon name="eraser" />

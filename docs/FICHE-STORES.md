@@ -23,7 +23,10 @@ O — ORBITE : passez à l'action sans perdre l'origine.
 • Écrivez comme vous pensez : au clavier sur téléphone, à la main avec l'Apple Pencil ou un stylet sur tablette (pression, surligneur, gomme, rejet de la paume).
 • Orbites d'action et tableau d'actions : chaque action garde l'adresse de l'idée qui l'a fait naître.
 • Mode Nuit étoilée, édition noir et blanc, français et anglais.
-• Vos idées restent à vous : aucun compte, aucune publicité, aucune donnée collectée. Export de sauvegarde en un geste.
+• Vos idées restent à vous : aucune publicité, aucun traçage, compte facultatif.
+
+PREMIUM (4,99 €/mois ou 39,99 €/an) : constellations illimitées, synchronisation iPhone, iPad, Android et web, export PDF et image, surligneur pour l'écriture manuscrite et le texte tapé. Abonnement renouvelé automatiquement, résiliable à tout moment.
+Conditions : https://alexandra-debon.github.io/constellamind/terms.html
 
 **Mots-clés** (100 car. max, Apple) : mind map,carte mentale,idées,TDAH,HPI,brainstorming,notes,stylet,Apple Pencil,organisation
 
@@ -52,7 +55,10 @@ ORBIT: take action without losing the origin.
 • Write the way you think: keyboard on your phone, handwriting with Apple Pencil or a stylus on a tablet (pressure, highlighter, eraser, palm rejection).
 • Action orbits and an action board: every action keeps the address of the idea that gave birth to it.
 • Starry night mode, black & white edition, English and French.
-• Your ideas stay yours: no account, no ads, no data collected. One-tap backup export.
+• Your ideas stay yours: no ads, no tracking, optional account.
+
+PREMIUM (€4.99/month or €39.99/year): unlimited constellations, sync across iPhone, iPad, Android and web, PDF and image export, highlighter for handwriting and typed text. Auto-renewing, cancel any time.
+Terms: https://alexandra-debon.github.io/constellamind/terms.html
 
 **Keywords**: mind map,ideas,ADHD,brainstorm,notes,stylus,Apple Pencil,planner,thinking,organize
 
@@ -60,4 +66,4 @@ ORBIT: take action without losing the origin.
 
 ---
 Politique de confidentialité / Privacy policy : https://alexandra-debon.github.io/constellamind/privacy.html
-Contact : contact@whisperandmap.com (à remplacer par votre adresse de contact publique)
+Contact : contact@whisper-and-map.com 

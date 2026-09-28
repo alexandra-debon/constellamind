@@ -1,0 +1,8 @@
+# Minimal Supabase CLI config for ConstellaMind (see docs/ABONNEMENTS.md).
+project_id = "constellamind"
+
+[functions.revenuecat-webhook]
+verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = true

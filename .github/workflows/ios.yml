@@ -18,6 +18,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          VITE_REVENUECAT_IOS_KEY: ${{ vars.VITE_REVENUECAT_IOS_KEY }}
+          VITE_REVENUECAT_ANDROID_KEY: ${{ vars.VITE_REVENUECAT_ANDROID_KEY }}
+          VITE_WEB_PURCHASE_LINK: ${{ vars.VITE_WEB_PURCHASE_LINK }}
       - run: npx cap sync ios
       - name: Build for simulator
         working-directory: ios/App
