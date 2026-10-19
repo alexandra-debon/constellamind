@@ -66,6 +66,20 @@ export async function saveText(name: string, text: string): Promise<void> {
   }
 }
 
+export async function removeText(name: string): Promise<void> {
+  try {
+    if (native) {
+      await Filesystem.deleteFile({ path: `${name}.json`, directory: Directory.Data });
+    } else {
+      localStorage.removeItem(`constellamind:${name}`);
+      const db = await idb();
+      db.transaction('kv', 'readwrite').objectStore('kv').delete(name);
+    }
+  } catch {
+    // already gone
+  }
+}
+
 /** Debounced writer so rapid edits don't hammer the disk. */
 export function writer(name: string, delay = 300) {
   let timer: number | undefined;

@@ -21,6 +21,9 @@
     "@capacitor/share": "^7.0.4",
     "@capacitor/splash-screen": "^7.0.5",
     "@capacitor/status-bar": "^7.0.6",
+    "@revenuecat/purchases-capacitor": "^10.4.0",
+    "@supabase/supabase-js": "^2.117.2",
+    "jspdf": "^3.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

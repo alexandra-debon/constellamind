@@ -1,4 +1,4 @@
-package com.whisperandmap.constellamind;
+package com.redfishprod.constellamind;
 
 import com.getcapacitor.BridgeActivity;
 

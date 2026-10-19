@@ -3,7 +3,7 @@
 Le code est prêt pour les deux stores : une seule base (React + Vite), emballée par
 [Capacitor](https://capacitorjs.com) dans une vraie app iOS (`ios/`) et une vraie app Android (`android/`).
 
-Identifiant de l'app : **`com.whisperandmap.constellamind`**. Il est définitif une fois l'app publiée. Pour le changer, modifiez-le avant la première publication dans `capacitor.config.ts`, `android/app/build.gradle` et le projet Xcode.
+Identifiant de l'app : **`com.redfishprod.constellamind`**. Il est définitif une fois l'app publiée. Pour le changer, modifiez-le avant la première publication dans `capacitor.config.ts`, `android/app/build.gradle` et le projet Xcode.
 
 ---
 
@@ -15,7 +15,9 @@ Identifiant de l'app : **`com.whisperandmap.constellamind`**. Il est définitif 
 | Ordinateur | **Un Mac avec Xcode** (obligatoire pour envoyer l'app à Apple) | N'importe quel ordinateur, ou rien : GitHub Actions compile l'app |
 | Délai de validation | 1 à 3 jours en général | Quelques heures à quelques jours. Un **nouveau compte personnel** doit d'abord faire tester l'app par 12 personnes pendant 14 jours (test fermé) |
 
-Pour un compte d'entreprise (Whisper&Map), prévoyez un numéro **D-U-N-S** (gratuit, quelques jours) côté Apple. Côté Google, le compte « organisation » évite la phase de test à 12 personnes.
+**Comptes au nom d'Alexandra Debon (entreprise individuelle RedFishProd.)** :
+- **Apple** : un compte *Individual* suffit. C'est votre nom, « Alexandra Debon », qui s'affiche comme vendeur sur l'App Store, et aucun numéro D-U-N-S n'est demandé. Si vous préférez que « RedFishProd. » s'affiche, il faut un compte *Organization*, avec un D-U-N-S demandé gratuitement au nom de l'entreprise individuelle.
+- **Google** : un compte personnel impose, avant la première publication, un test fermé avec au moins 12 testeurs pendant 14 jours. Un compte *Organisation* au nom de RedFishProd. (avec D-U-N-S) évite cette étape.
 
 ---
 
@@ -40,9 +42,9 @@ Dans Xcode :
 3. Menu **Product → Archive**, puis **Distribute App → App Store Connect → Upload**.
 
 Dans [App Store Connect](https://appstoreconnect.apple.com) :
-1. **Mes apps → +** → nouvelle app, identifiant `com.whisperandmap.constellamind`.
+1. **Mes apps → +** → nouvelle app, identifiant `com.redfishprod.constellamind`.
 2. Remplissez la fiche avec les textes de [`docs/FICHE-STORES.md`](FICHE-STORES.md).
-3. **Confidentialité** : « Aucune donnée collectée ». URL de la politique : `https://alexandra-debon.github.io/constellamind/privacy.html`.
+3. **Confidentialité** : déclarer *Adresse e-mail*, *Autre contenu utilisateur* et *Historique d'achats*, liés à l'utilisateur, pour le *fonctionnement de l'app*, sans suivi. URL de la politique : `https://constellamind.app/privacy.html`. Abonnements : voir [ABONNEMENTS.md](ABONNEMENTS.md).
 4. Captures d'écran : iPhone 6,9" **et** iPad 13" (l'app étant pour iPad, elles sont obligatoires).
 5. Choisissez le build envoyé depuis Xcode → **Soumettre pour vérification**.
 
@@ -90,7 +92,7 @@ Le fichier produit : `android/app/build/outputs/bundle/release/app-release.aab`.
 
 1. **Créer une application** → ConstellaMind, gratuite.
 2. Fiche du Store : textes de [`docs/FICHE-STORES.md`](FICHE-STORES.md), icône 512 px (`assets/icon-only.png`), image de présentation 1024 × 500, captures téléphone et tablette.
-3. **Sécurité des données** : aucune donnée collectée ni partagée. Politique : `https://alexandra-debon.github.io/constellamind/privacy.html`.
+3. **Sécurité des données** : e-mail, contenu créé par l'utilisateur et historique d'achats collectés (fonctionnement de l'app, chiffrés en transit, suppression possible), rien de partagé. Politique : `https://constellamind.app/privacy.html`.
 4. Classification du contenu (questionnaire) → « Tout public ».
 5. **Tests → Test fermé** (obligatoire pour un nouveau compte personnel), puis **Production** → importer le `.aab` → envoyer pour examen.
 

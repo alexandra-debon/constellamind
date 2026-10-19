@@ -1,5 +1,6 @@
 import { useRef, useState, type MouseEvent as RMouseEvent, type PointerEvent as RPointerEvent } from 'react';
 import { BottomLinks, hrefOf, StarIcon, TopNav } from '../components/common';
+import { useAccount } from '../account';
 import { askConfirm } from '../components/confirm';
 import { Icon } from '../components/icons';
 import { InstallHint } from '../components/InstallHint';
@@ -48,7 +49,8 @@ function hit(x: number, y: number, slop = 10) {
 }
 
 export default function Core() {
-  const { data, update, t, fmt } = useStore();
+  const { data, update, t, fmt, currentDoc } = useStore();
+  const { premium } = useAccount();
   const svg = useRef<SVGSVGElement>(null);
   const [drawMode, setDrawMode] = useState(false);
   const [drag, setDrag] = useState<{ from: string; x: number; y: number; id: number } | null>(null);
@@ -116,13 +118,19 @@ export default function Core() {
       <header className="app-header">
         <div>
           <h1>ConstellaMind</h1>
-          <p>
-            {t.methodName} · {t.appTagline}
-          </p>
+          <a className="doc-switch" href="#/constellations">
+            {currentDoc.name} <span aria-hidden="true">▾</span>
+          </a>
         </div>
-        <a className="icon-btn" href="#/methode" aria-label={t.settings}>
-          <Icon name="settings" size={22} />
-        </a>
+        <div className="header-actions">
+          <a className="icon-btn" href="#/compte" aria-label={t.account.title}>
+            <Icon name="user" size={22} />
+            {premium && <span className="premium-dot" />}
+          </a>
+          <a className="icon-btn" href="#/methode" aria-label={t.settings}>
+            <Icon name="settings" size={22} />
+          </a>
+        </div>
       </header>
 
       <InstallHint />

@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { AccountProvider } from './account';
 import App from './App';
 import { setupNative } from './native';
 import { StoreProvider } from './store';
@@ -19,7 +20,9 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator && !Capacitor.isNativeP
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StoreProvider fallback={<div className="boot" aria-hidden="true" />}>
-      <App />
+      <AccountProvider>
+        <App />
+      </AccountProvider>
     </StoreProvider>
   </StrictMode>,
 );

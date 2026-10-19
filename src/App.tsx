@@ -1,4 +1,7 @@
+import type { PremiumFeature } from './account';
 import { Onboarding } from './components/Onboarding';
+import { AccountPage, ConstellationsPage, PremiumPage } from './pages/Account';
+import { SyncAgent } from './sync';
 import { isValidAddress, isStar } from './model';
 import ActionsBoard from './pages/Actions';
 import Core from './pages/Core';
@@ -11,6 +14,7 @@ export default function App() {
     <>
       <Screen />
       <Onboarding />
+      <SyncAgent />
     </>
   );
 }
@@ -40,6 +44,12 @@ function Screen() {
       return <Notes />;
     case 'methode':
       return <Method />;
+    case 'premium':
+      return <PremiumPage key={param} reason={(param || undefined) as PremiumFeature | undefined} />;
+    case 'compte':
+      return <AccountPage />;
+    case 'constellations':
+      return <ConstellationsPage />;
   }
   return <Core />;
 }

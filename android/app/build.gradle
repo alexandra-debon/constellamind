@@ -9,10 +9,10 @@ if (keystoreFile.exists()) keystoreFile.withInputStream { keystoreProps.load(it)
 def signingValue = { String key, String env -> keystoreProps.getProperty(key) ?: System.getenv(env) }
 
 android {
-    namespace "com.whisperandmap.constellamind"
+    namespace "com.redfishprod.constellamind"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.whisperandmap.constellamind"
+        applicationId "com.redfishprod.constellamind"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')

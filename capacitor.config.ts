@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.whisperandmap.constellamind',
+  appId: 'com.redfishprod.constellamind',
   appName: 'ConstellaMind',
   webDir: 'dist',
   backgroundColor: '#fffdf7',

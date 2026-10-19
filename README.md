@@ -33,7 +33,8 @@ Trois principes : **chaque idée a une adresse** (É3.2 = étoile 3, satellite 2
 - **Nuit étoilée** (mode sombre) ou papier, automatique selon le système.
 - **Français / English** (édition COTA, adresses S3.2) et **Couleur / Noir & blanc** (pour les tablettes e-ink comme reMarkable ou Paper Pro).
 - Sauvegarde automatique sur l'appareil (fichiers privés de l'app sur iOS et Android), export par la feuille de partage et import d'un fichier `.json`.
-- Aucun compte, aucune publicité, aucune donnée collectée ([politique de confidentialité](public/privacy.html)).
+- Aucune publicité, aucun traçage, compte facultatif ([confidentialité](public/privacy.html), [conditions](public/terms.html)).
+- **Premium** (4,99 €/mois ou 39,99 €/an) : constellations illimitées, synchronisation entre appareils, export PDF et image, surligneur. Achats App Store, Google Play et web réunis par RevenueCat, comptes et synchro sur Supabase. Mise en place : **[docs/ABONNEMENTS.md](docs/ABONNEMENTS.md)**.
 
 ## Développer
 
@@ -56,11 +57,10 @@ Tout est expliqué pas à pas dans **[docs/PUBLIER.md](docs/PUBLIER.md)**. Les t
 
 ## Version web
 
-Le workflow `.github/workflows/deploy.yml` publie l'app sur GitHub Pages à chaque push sur `main`.
-Il faut l'activer une fois : **Settings → Pages → Source : GitHub Actions**.
-Sur iPad, ouvrez ensuite l'adresse dans Safari, puis **Partager → Sur l'écran d'accueil** pour l'utiliser comme une app.
+L'app web est publiée sur **https://constellamind.app** par Netlify, reliée à ce dépôt : chaque modification de `main` est mise en ligne automatiquement. La configuration se trouve dans [`netlify.toml`](netlify.toml).
+Sur iPhone ou iPad, ouvrez l'adresse dans Safari, puis **Partager → Sur l'écran d'accueil** pour l'utiliser comme une app (elle fonctionne aussi hors connexion).
 
 ---
 
-© 2026 Alexandra Mélody Debon · Whisper&Map — ConstellaMind et la méthode NÉSO / COTA. Tous droits réservés.
+© 2026 Alexandra Mélody Debon (EI RedFishProd., RCS Perpignan 520 523 028) — ConstellaMind et la méthode NÉSO / COTA. Œuvre déposée sur Copyright.eu (certificat d'horodatage n° 15095 du 19/10/2026). Tous droits réservés.
 Ce dépôt n'est pas sous licence libre : la méthode, les textes et le code ne peuvent pas être réutilisés sans autorisation.
