@@ -45,7 +45,11 @@ Projet **`constellamind`** (réf. `uxcjevgxzmkpmlkapmwl`, région Paris `eu-west
    <p>Il est valable 1 heure. Si vous n'avez rien demandé, ignorez ce message.</p>
    ```
    Sujet conseillé : `Votre code ConstellaMind`.
-2. **Authentication → Emails → SMTP Settings** : branchez **Brevo** (Brevo → *SMTP & API* → *SMTP*). Hôte `smtp-relay.brevo.com`, port `587`, expéditeur `contact@constellamind.app`. **Indispensable** : sans SMTP personnalisé, Supabase n'envoie des e-mails qu'aux membres de l'équipe du projet, avec un plafond horaire très bas.
+2. **Authentication → Emails → SMTP Settings** : branchez un service d'envoi d'e-mails. **Indispensable** : sans SMTP personnalisé, Supabase n'envoie des e-mails qu'aux membres de l'équipe du projet, avec un plafond horaire très bas.
+   Recommandé : **[Resend](https://resend.com)**, gratuit jusqu'à 3 000 e-mails par mois (100 par jour), largement suffisant pour les codes de connexion au lancement.
+   - Dans Resend : *Domains → Add domain* → `constellamind.app`, puis ajoutez chez l'hébergeur du domaine les enregistrements DNS indiqués (SPF, DKIM). Créez ensuite une clé dans *API Keys*.
+   - Dans Supabase : *Enable custom SMTP*. Hôte `smtp.resend.com`, port `465`, utilisateur `resend`, mot de passe = la clé API Resend, expéditeur `contact@constellamind.app`, nom `ConstellaMind`.
+   - Ensuite, *Authentication → Rate Limits* : montez la limite d'e-mails par heure (par exemple 30).
 3. **Authentication → URL Configuration** : *Site URL* = `https://alexandra-debon.github.io/constellamind`.
 4. Plus tard, après RevenueCat (étape 3) : **Edge Functions → Secrets** :
    - `REVENUECAT_WEBHOOK_AUTH` = `Bearer <un long secret au hasard>`
