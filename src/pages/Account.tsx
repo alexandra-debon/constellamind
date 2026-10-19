@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { useEffect, useState } from 'react';
-import { useAccount, usePremium, type Plan, type PremiumFeature } from '../account';
+import { useAccount, usePremium, type AccessCode, type Plan, type PremiumFeature } from '../account';
 import { Breadcrumb, Section, TopNav } from '../components/common';
 import { askConfirm, notify } from '../components/confirm';
 import { Icon } from '../components/icons';
@@ -175,6 +175,13 @@ export function PremiumPage({ reason }: { reason?: PremiumFeature }) {
           <p className="fine legal">{t.premium.legal}</p>
         </>
       )}
+      {!acc.premium && acc.available && (
+        <p className="center">
+          <a className="chip" href="#/compte">
+            <Icon name="star" size={16} /> {t.codes.have}
+          </a>
+        </p>
+      )}
       {legalLinks(t)}
     </div>
   );
@@ -291,6 +298,7 @@ export function AccountPage() {
             </form>
           )}
           {error && <p className="form-error">{t.account.error}</p>}
+          <p className="fine">{t.codes.signInFirst}</p>
         </div>
       ) : (
         <>
@@ -326,6 +334,14 @@ export function AccountPage() {
               )}
             </div>
           </div>
+          {!acc.premium && <RedeemCode />}
+          {acc.isAdmin && (
+            <p>
+              <a className="chip strong" href="#/codes">
+                <Icon name="star" size={16} /> {t.codes.adminLink}
+              </a>
+            </p>
+          )}
           <div className="link-row">
             <button type="button" className="chip" onClick={() => void acc.signOut()}>
               {t.account.signOut}
@@ -451,6 +467,227 @@ export function ConstellationsPage() {
           </button>
         </div>
       </Section>
+    </div>
+  );
+}
+
+/* ───────────── CODE D'ACCÈS (côté utilisateur) ───────────── */
+
+function RedeemCode() {
+  const { t } = useStore();
+  const acc = useAccount();
+  const [code, setCode] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const submit = async () => {
+    setBusy(true);
+    setMsg(null);
+    try {
+      const until = await acc.redeemCode(code);
+      void tick();
+      setMsg({ ok: true, text: `${t.codes.activated} ${until ? `${t.codes.until} ${new Date(until).toLocaleDateString()}` : t.codes.forever}.` });
+      setCode('');
+    } catch (e) {
+      const key = (e as Error).message as keyof typeof t.codes.errors;
+      setMsg({ ok: false, text: t.codes.errors[key] ?? t.codes.errors.unknown });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form
+      className="card code-card"
+      onSubmit={(e) => {
+        e.preventDefault();
+        void submit();
+      }}
+    >
+      <label className="field">
+        <span>{t.codes.have}</span>
+        <input
+          id="access-code"
+          className="code-field"
+          autoCapitalize="characters"
+          autoComplete="off"
+          spellCheck={false}
+          placeholder={t.codes.placeholder}
+          value={code}
+          onChange={(e) => setCode(e.target.value.toUpperCase())}
+        />
+      </label>
+      <button type="submit" className="btn primary" disabled={busy || code.trim().length < 6}>
+        {t.codes.activate}
+      </button>
+      {msg && <p className={msg.ok ? 'form-ok' : 'form-error'}>{msg.text}</p>}
+    </form>
+  );
+}
+
+/* ───────────── CODES D'ACCÈS (écran de l'éditrice) ───────────── */
+
+const DURATIONS: (number | null)[] = [30, 90, 180, 365, null];
+
+export function CodesAdminPage() {
+  const { t } = useStore();
+  const acc = useAccount();
+  const [codes, setCodes] = useState<AccessCode[]>([]);
+  const [label, setLabel] = useState('');
+  const [days, setDays] = useState<number | null>(90);
+  const [created, setCreated] = useState<string | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => {
+    try {
+      setCodes(await acc.admin.list());
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+  useEffect(() => {
+    if (acc.isAdmin) void load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [acc.isAdmin]);
+
+  const durationLabel = (d: number | null) =>
+    d === null ? t.codes.unlimited : d === 365 ? t.codes.oneYear : t.codes.months(Math.round(d / 30));
+
+  const create = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const code = await acc.admin.create(label.trim(), days);
+      setCreated(code);
+      setLabel('');
+      await load();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const copy = async (text: string, key: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(key);
+      window.setTimeout(() => setCopied(null), 1800);
+    } catch {
+      // clipboard refused: the text stays selectable on screen
+    }
+  };
+
+  const remove = async (code: string) => {
+    if (!(await askConfirm(`${t.codes.remove} ${code} ?`, t.codes.remove, t.cancel))) return;
+    await acc.admin.remove(code);
+    await load();
+  };
+
+  const campaignCount = codes.filter((c) => c.campaign === 'FRIEND2026').length;
+  const errText = (key: string | null) => (key ? (t.codes.errors[key as keyof typeof t.codes.errors] ?? t.codes.errors.unknown) : null);
+
+  return (
+    <div className="page">
+      <TopNav active="" />
+      <Breadcrumb crumbs={[{ label: t.account.title, href: '#/compte' }, { label: t.codes.adminTitle, current: true }]} />
+
+      {!acc.isAdmin ? (
+        <p className="empty">{t.codes.errors.not_admin}</p>
+      ) : (
+        <>
+          <p className="intro">{t.codes.adminIntro}</p>
+          <form
+            className="card code-card"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void create();
+            }}
+          >
+            <label className="field">
+              <span>{t.codes.forWho}</span>
+              <input id="code-label" value={label} onChange={(e) => setLabel(e.target.value)} />
+            </label>
+            <div className="field">
+              <span>{t.codes.duration}</span>
+              <div className="link-row tight">
+                {DURATIONS.map((d) => (
+                  <button key={String(d)} type="button" className={`chip ${days === d ? 'on' : ''}`} onClick={() => setDays(d)}>
+                    {durationLabel(d)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button type="submit" className="btn primary" disabled={busy || campaignCount >= 50}>
+              <Icon name="plus" size={18} /> {t.codes.create}
+            </button>
+            <p className="fine">{t.codes.count(campaignCount)}</p>
+            {error && <p className="form-error">{errText(error)}</p>}
+          </form>
+
+          {created && (
+            <div className="card code-created">
+              <span className="label">{t.codes.created}</span>
+              <div className="code-big">{created}</div>
+              <div className="link-row tight">
+                <button type="button" className="chip" onClick={() => void copy(created, 'code')}>
+                  {copied === 'code' ? t.codes.copied : t.codes.copy}
+                </button>
+                <button type="button" className="chip" onClick={() => void copy(t.codes.shareText(created), 'msg')}>
+                  {copied === 'msg' ? t.codes.copied : t.codes.share}
+                </button>
+              </div>
+              <pre className="share-preview">{t.codes.shareText(created)}</pre>
+            </div>
+          )}
+
+          {codes.length === 0 ? (
+            <p className="empty">{t.codes.empty}</p>
+          ) : (
+            <ul className="code-list">
+              {codes.map((c) => {
+                const expired = !c.redeemed_by && new Date(c.redeem_before).getTime() < Date.now();
+                return (
+                  <li key={c.code + (c.redeemed_by ?? '')} className={`card code-item ${c.redeemed_by ? 'used' : expired ? 'expired' : ''}`}>
+                    <div className="code-main">
+                      <b className="code-mono">{c.code}</b>
+                      <span className="fine">
+                        {c.label ? `${c.label} · ` : ''}
+                        {durationLabel(c.grant_days)}
+                      </span>
+                    </div>
+                    <div className="code-status fine">
+                      {c.redeemed_by ? (
+                        <>
+                          {t.codes.usedBy} <b>{c.redeemed_by}</b> {t.codes.on} {new Date(c.redeemed_at!).toLocaleDateString()}
+                          <br />
+                          {t.codes.accessUntil} {c.access_until ? new Date(c.access_until).toLocaleDateString() : t.codes.forever}
+                        </>
+                      ) : expired ? (
+                        t.codes.expired
+                      ) : (
+                        `${t.codes.available} ${new Date(c.redeem_before).toLocaleDateString()}`
+                      )}
+                    </div>
+                    {!c.redeemed_by && !expired && (
+                      <div className="link-row tight">
+                        <button type="button" className="chip small" onClick={() => void copy(t.codes.shareText(c.code), c.code)}>
+                          {copied === c.code ? t.codes.copied : t.codes.share}
+                        </button>
+                        <button type="button" className="chip small danger" onClick={() => void remove(c.code)}>
+                          {t.codes.remove}
+                        </button>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </>
+      )}
     </div>
   );
 }
