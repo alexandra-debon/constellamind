@@ -63,5 +63,5 @@ Sur iPad, ouvrez ensuite l'adresse dans Safari, puis **Partager → Sur l'écran
 
 ---
 
-© 2026 Alexandra Mélody Debon · Whisper&Map — ConstellaMind et la méthode NÉSO / COTA. Tous droits réservés.
+© 2026 Alexandra Mélody Debon (EI RedFishProd., RCS Perpignan 520 523 028) — ConstellaMind et la méthode NÉSO / COTA. Œuvre déposée sur Copyright.eu (certificat d'horodatage n° 15095 du 19/10/2026). Tous droits réservés.
 Ce dépôt n'est pas sous licence libre : la méthode, les textes et le code ne peuvent pas être réutilisés sans autorisation.

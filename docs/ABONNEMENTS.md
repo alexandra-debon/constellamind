@@ -24,13 +24,13 @@ Web ─────────── Stripe ──────┘         ▲  
 | Export PDF / image | — | ✓ |
 | Surligneur (manuscrit et texte tapé) | — | ✓ |
 
-Tous les comptes (Apple, Google, Stripe, RevenueCat) sont **au nom de Whisper&Map**.
+Tous les comptes (Apple, Google, Stripe, RevenueCat) sont **au nom d'Alexandra Debon, entreprise individuelle RedFishProd.** (RCS Perpignan 520 523 028).
 
 ---
 
 ## 1. Supabase (comptes, synchro) — ✅ projet créé
 
-Projet **`constellamind`** (réf. `uxcjevgxzmkpmlkapmwl`, région Paris `eu-west-3`), dans l'organisation Whisper And Map. Déjà en place :
+Projet **`constellamind`** (réf. `uxcjevgxzmkpmlkapmwl`, région Paris `eu-west-3`), dans votre organisation Supabase. Déjà en place :
 - tables `entitlements` et `constellations`, avec des règles d'accès vérifiées : seul un abonné peut synchroniser, personne ne peut s'attribuer Premium, chacun ne voit que ses données ;
 - fonctions `delete-account` et `revenuecat-webhook` déployées ;
 - adresse et clé publique du projet dans [`.env`](../.env), utilisées par toutes les compilations.
@@ -57,17 +57,17 @@ Projet **`constellamind`** (réf. `uxcjevgxzmkpmlkapmwl`, région Paris `eu-west
 - `constellamind_premium_monthly` : 1 mois, 4,99 €
 - `constellamind_premium_yearly` : 1 an, 39,99 €
 
-Pensez à signer l'*Accord pour les apps payantes* et à remplir les informations bancaires et fiscales de Whisper&Map. Inscrivez-vous au *App Store Small Business Program* (commission de 15 % au lieu de 30 %).
+Pensez à signer l'*Accord pour les apps payantes* et à remplir les informations bancaires et fiscales de votre entreprise individuelle (RedFishProd.). Inscrivez-vous au *App Store Small Business Program* (commission de 15 % au lieu de 30 %).
 
-**Google Play Console** → *Monétiser → Abonnements* : un abonnement `constellamind_premium` avec deux forfaits de base, `monthly` (4,99 €) et `yearly` (39,99 €). Profil de paiement au nom de Whisper&Map. La commission Google est de 15 % sur les abonnements.
+**Google Play Console** → *Monétiser → Abonnements* : un abonnement `constellamind_premium` avec deux forfaits de base, `monthly` (4,99 €) et `yearly` (39,99 €). Profil de paiement au nom de votre entreprise individuelle (RedFishProd.). La commission Google est de 15 % sur les abonnements.
 
 ## 3. RevenueCat
 
 1. Créez un projet **ConstellaMind** sur [revenuecat.com](https://www.revenuecat.com).
-2. Ajoutez les apps **App Store** (identifiant `com.whisperandmap.constellamind`, clé In-App Purchase d'App Store Connect) et **Play Store** (compte de service Google).
+2. Ajoutez les apps **App Store** (identifiant `com.redfishprod.constellamind`, clé In-App Purchase d'App Store Connect) et **Play Store** (compte de service Google).
 3. Créez l'*Entitlement* **`premium`** et attachez-y les produits des deux boutiques.
 4. Créez l'*Offering* **`default`** (courante) avec deux packages : **Monthly** et **Annual**.
-5. **Web** : *Web Billing* → connectez **Stripe** (compte Whisper&Map), créez les deux produits web au même prix, rattachez-les à `premium` et à l'offering, puis créez une **Web Purchase Link**. Copiez son adresse (`https://pay.rev.cat/…`).
+5. **Web** : *Web Billing* → connectez **Stripe** (compte au nom de RedFishProd.), créez les deux produits web au même prix, rattachez-les à `premium` et à l'offering, puis créez une **Web Purchase Link**. Copiez son adresse (`https://pay.rev.cat/…`).
 6. **Integrations → Webhooks** : URL `https://uxcjevgxzmkpmlkapmwl.supabase.co/functions/v1/revenuecat-webhook`, *Authorization header* : exactement la même valeur que `REVENUECAT_WEBHOOK_AUTH` (`Bearer …`).
 7. **API keys** : copiez les clés publiques iOS (`appl_…`) et Android (`goog_…`), ainsi que la **clé secrète** (`sk_…`) pour l'étape 1.5.
 
@@ -106,4 +106,4 @@ Pour les tests d'achat : *Sandbox testers* dans App Store Connect, *License test
 - Achat possible **sans compte** sur iPhone et Android (le compte n'est demandé que pour la synchro). Les achats se rattachent au compte dès la connexion.
 - Sur iOS, pas de lien vers le paiement web (interdit par Apple hors exceptions régionales) : le web a sa propre caisse.
 
-⚠️ `terms.html` est un modèle : faites-le relire par un professionnel du droit (rétractation, médiation de la consommation, mentions légales de Whisper&Map).
+⚠️ `terms.html` est un modèle : faites-le relire par un professionnel du droit (rétractation, médiation de la consommation, mentions légales de l'entreprise individuelle).

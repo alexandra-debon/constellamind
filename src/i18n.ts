@@ -6,7 +6,7 @@ const fr = {
   appTagline: 'la pensée en constellation',
   cota: 'COTA — Constellation-Oriented Thinking Approach',
   designedFor: 'Conçue pour les esprits foisonnants et la pensée en arborescence',
-  copyright: '© 2026 Alexandra Mélody Debon · Whisper&Map — ConstellaMind et la méthode NÉSO · tous droits réservés',
+  copyright: '© 2026 Alexandra Mélody Debon · RedFishProd. — ConstellaMind et la méthode NÉSO · œuvre déposée (Copyright.eu n° 15095) · tous droits réservés',
 
   nav: {
     core: 'CŒUR',
@@ -285,7 +285,7 @@ const en: Dict = {
   appTagline: 'thinking in constellations',
   cota: 'COTA — Constellation-Oriented Thinking Approach',
   designedFor: 'Designed for overflowing minds and branching thinkers',
-  copyright: '© 2026 Alexandra Mélody Debon — ConstellaMind and the COTA method · all rights reserved',
+  copyright: '© 2026 Alexandra Mélody Debon · RedFishProd. — ConstellaMind and the COTA method · registered work (Copyright.eu No. 15095) · all rights reserved',
 
   nav: {
     core: 'CORE',

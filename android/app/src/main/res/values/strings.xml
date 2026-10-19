@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">ConstellaMind</string>
     <string name="title_activity_main">ConstellaMind</string>
-    <string name="package_name">com.whisperandmap.constellamind</string>
-    <string name="custom_url_scheme">com.whisperandmap.constellamind</string>
+    <string name="package_name">com.redfishprod.constellamind</string>
+    <string name="custom_url_scheme">com.redfishprod.constellamind</string>
 </resources>
