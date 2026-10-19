@@ -57,9 +57,8 @@ Tout est expliqué pas à pas dans **[docs/PUBLIER.md](docs/PUBLIER.md)**. Les t
 
 ## Version web
 
-Le workflow `.github/workflows/deploy.yml` publie l'app sur GitHub Pages à chaque push sur `main`.
-Il faut l'activer une fois : **Settings → Pages → Source : GitHub Actions**.
-Sur iPad, ouvrez ensuite l'adresse dans Safari, puis **Partager → Sur l'écran d'accueil** pour l'utiliser comme une app.
+L'app web est publiée sur **https://constellamind.app** par Netlify, reliée à ce dépôt : chaque modification de `main` est mise en ligne automatiquement. La configuration se trouve dans [`netlify.toml`](netlify.toml).
+Sur iPhone ou iPad, ouvrez l'adresse dans Safari, puis **Partager → Sur l'écran d'accueil** pour l'utiliser comme une app (elle fonctionne aussi hors connexion).
 
 ---
 

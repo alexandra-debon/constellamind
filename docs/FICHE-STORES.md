@@ -26,7 +26,7 @@ O — ORBITE : passez à l'action sans perdre l'origine.
 • Vos idées restent à vous : aucune publicité, aucun traçage, compte facultatif.
 
 PREMIUM (4,99 €/mois ou 39,99 €/an) : constellations illimitées, synchronisation iPhone, iPad, Android et web, export PDF et image, surligneur pour l'écriture manuscrite et le texte tapé. Abonnement renouvelé automatiquement, résiliable à tout moment.
-Conditions : https://alexandra-debon.github.io/constellamind/terms.html
+Conditions : https://constellamind.app/terms.html
 
 **Mots-clés** (100 car. max, Apple) : mind map,carte mentale,idées,TDAH,HPI,brainstorming,notes,stylet,Apple Pencil,organisation
 
@@ -58,12 +58,12 @@ ORBIT: take action without losing the origin.
 • Your ideas stay yours: no ads, no tracking, optional account.
 
 PREMIUM (€4.99/month or €39.99/year): unlimited constellations, sync across iPhone, iPad, Android and web, PDF and image export, highlighter for handwriting and typed text. Auto-renewing, cancel any time.
-Terms: https://alexandra-debon.github.io/constellamind/terms.html
+Terms: https://constellamind.app/terms.html
 
 **Keywords**: mind map,ideas,ADHD,brainstorm,notes,stylus,Apple Pencil,planner,thinking,organize
 
 **Category**: Productivity (secondary: Education)
 
 ---
-Politique de confidentialité / Privacy policy : https://alexandra-debon.github.io/constellamind/privacy.html
+Politique de confidentialité / Privacy policy : https://constellamind.app/privacy.html
 Contact : contact@constellamind.app 

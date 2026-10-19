@@ -12,7 +12,7 @@ export const config = {
   /** RevenueCat Web Purchase Link (Stripe-backed web billing), e.g. https://pay.rev.cat/abc123 */
   webPurchaseLink: (env.VITE_WEB_PURCHASE_LINK as string | undefined) ?? '',
   /** Public site where legal pages live. */
-  siteUrl: (env.VITE_SITE_URL as string | undefined) ?? 'https://alexandra-debon.github.io/constellamind',
+  siteUrl: (env.VITE_SITE_URL as string | undefined) ?? 'https://constellamind.app',
 };
 
 export const ENTITLEMENT = 'premium';

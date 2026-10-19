@@ -50,7 +50,7 @@ Projet **`constellamind`** (réf. `uxcjevgxzmkpmlkapmwl`, région Paris `eu-west
    - Dans Resend : *Domains → Add domain* → `constellamind.app`, puis ajoutez chez l'hébergeur du domaine les enregistrements DNS indiqués (SPF, DKIM). Créez ensuite une clé dans *API Keys*.
    - Dans Supabase : *Enable custom SMTP*. Hôte `smtp.resend.com`, port `465`, utilisateur `resend`, mot de passe = la clé API Resend, expéditeur `contact@constellamind.app`, nom `ConstellaMind`.
    - Ensuite, *Authentication → Rate Limits* : montez la limite d'e-mails par heure (par exemple 30).
-3. **Authentication → URL Configuration** : *Site URL* = `https://alexandra-debon.github.io/constellamind`.
+3. **Authentication → URL Configuration** : *Site URL* = `https://constellamind.app`.
 4. Plus tard, après RevenueCat (étape 3) : **Edge Functions → Secrets** :
    - `REVENUECAT_WEBHOOK_AUTH` = `Bearer <un long secret au hasard>`
    - `REVENUECAT_SECRET_KEY` = la clé secrète RevenueCat `sk_…`
