@@ -91,6 +91,8 @@ Le site, l'APK Android et la vérification iOS se recompilent alors avec les abo
 
 ## 5. Vous offrir Premium (et à vos testeurs)
 
+Les adresses déclarées dans `private.admins` (l'éditrice) ont automatiquement Premium, sans date de fin. Pour un testeur, créez-lui plutôt un code d'accès (section 5 bis).
+
 Après avoir créé votre compte dans l'app, dans Supabase → *SQL Editor* (ou demandez-le-moi) :
 
 ```sql
