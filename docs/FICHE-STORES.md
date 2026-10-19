@@ -66,4 +66,4 @@ Terms: https://alexandra-debon.github.io/constellamind/terms.html
 
 ---
 Politique de confidentialité / Privacy policy : https://alexandra-debon.github.io/constellamind/privacy.html
-Contact : contact@whisper-and-map.com 
+Contact : contact@constellamind.app 
