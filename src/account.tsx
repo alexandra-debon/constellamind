@@ -68,6 +68,16 @@ interface Account {
   user: { id: string; email: string } | null;
   premium: boolean;
   premiumUntil: string | null;
+  /** 'store' (paid subscription) or 'code' (free-access code). */
+  premiumSource: string | null;
+  isAdmin: boolean;
+  /** Redeems a free-access code for the signed-in account; resolves to the end date (null = no end). */
+  redeemCode: (code: string) => Promise<string | null>;
+  admin: {
+    create: (label: string, days: number | null) => Promise<string>;
+    list: () => Promise<AccessCode[]>;
+    remove: (code: string) => Promise<void>;
+  };
   ready: boolean;
   sendCode: (email: string) => Promise<void>;
   verifyCode: (email: string, code: string) => Promise<void>;
@@ -82,6 +92,24 @@ interface Account {
   manageUrl: () => string | null;
   canBuy: boolean;
 }
+
+export interface AccessCode {
+  code: string;
+  label: string;
+  campaign: string;
+  grant_days: number | null;
+  redeem_before: string;
+  uses: number;
+  max_uses: number;
+  created_at: string;
+  redeemed_by: string | null;
+  redeemed_at: string | null;
+  access_until: string | null;
+}
+
+/** Maps the database's error keywords (raised in the SQL functions) to stable codes. */
+const CODE_ERRORS = ['invalid_code', 'already_used', 'expired_code', 'code_used_up', 'not_signed_in', 'not_admin', 'campaign_full'];
+const codeError = (message: string) => CODE_ERRORS.find((k) => message.includes(k)) ?? 'unknown';
 
 const Ctx = createContext<Account | null>(null);
 
@@ -98,7 +126,8 @@ const devPremium = () => {
 export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(!hasBackend());
-  const [serverPremium, setServerPremium] = useState<{ on: boolean; until: string | null }>({ on: false, until: null });
+  const [serverPremium, setServerPremium] = useState<{ on: boolean; until: string | null; source?: string | null }>({ on: false, until: null });
+  const [isAdmin, setIsAdmin] = useState(false);
   const [storePremium, setStorePremium] = useState(false);
   const userId = user?.id ?? null;
   const lastRcUser = useRef<string | null>(null);
@@ -122,12 +151,15 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     const sb = await supabase();
     if (!sb || !userId) {
       setServerPremium({ on: false, until: null });
+      setIsAdmin(false);
       return;
     }
-    const { data } = await sb.from('entitlements').select('premium, expires_at').eq('user_id', userId).maybeSingle();
-    const until = (data?.expires_at as string | null) ?? null;
-    const on = !!data?.premium && (!until || new Date(until).getTime() > Date.now());
-    setServerPremium({ on, until });
+    // Store subscription or free-access code, whichever is active (see my_premium in SQL).
+    const { data } = await sb.rpc('my_premium');
+    const row = (Array.isArray(data) ? data[0] : data) as { premium?: boolean; until?: string | null; source?: string } | null;
+    setServerPremium({ on: !!row?.premium, until: row?.until ?? null, source: row?.source ?? null });
+    const { data: admin } = await sb.rpc('am_i_admin');
+    setIsAdmin(admin === true);
   }, [userId]);
 
   const readStore = useCallback(async () => {
@@ -160,6 +192,38 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       user: user ? { id: user.id, email: user.email ?? '' } : null,
       premium: serverPremium.on || storePremium || devPremium(),
       premiumUntil: serverPremium.until,
+      premiumSource: serverPremium.source ?? (storePremium ? 'store' : null),
+      isAdmin,
+      redeemCode: async (code) => {
+        const sb = await supabase();
+        if (!sb) throw new Error('offline');
+        const { data, error } = await sb.rpc('redeem_access_code', { p_code: code.trim().toUpperCase() });
+        if (error) throw new Error(codeError(error.message));
+        await readServer();
+        return (data as string | null) ?? null;
+      },
+      admin: {
+        create: async (label, days) => {
+          const sb = await supabase();
+          if (!sb) throw new Error('offline');
+          const { data, error } = await sb.rpc('create_access_code', { p_label: label, p_grant_days: days });
+          if (error) throw new Error(codeError(error.message));
+          return data as string;
+        },
+        list: async () => {
+          const sb = await supabase();
+          if (!sb) return [];
+          const { data, error } = await sb.rpc('list_access_codes');
+          if (error) throw new Error(codeError(error.message));
+          return (data ?? []) as AccessCode[];
+        },
+        remove: async (code) => {
+          const sb = await supabase();
+          if (!sb) return;
+          const { error } = await sb.rpc('revoke_access_code', { p_code: code });
+          if (error) throw new Error(codeError(error.message));
+        },
+      },
       ready,
       canBuy: native ? !!(platform === 'ios' ? config.revenuecatIos : config.revenuecatAndroid) : !!config.webPurchaseLink,
       sendCode: async (email) => {
@@ -233,7 +297,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
             ? 'https://play.google.com/store/account/subscriptions'
             : null,
     }),
-    [user, serverPremium, storePremium, ready, refresh, readServer, userId],
+    [user, serverPremium, storePremium, ready, refresh, readServer, userId, isAdmin],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

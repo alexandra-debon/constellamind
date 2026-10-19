@@ -91,6 +91,8 @@ Le site, l'APK Android et la vérification iOS se recompilent alors avec les abo
 
 ## 5. Vous offrir Premium (et à vos testeurs)
 
+Les adresses déclarées dans `private.admins` (l'éditrice) ont automatiquement Premium, sans date de fin. Pour un testeur, créez-lui plutôt un code d'accès (section 5 bis).
+
 Après avoir créé votre compte dans l'app, dans Supabase → *SQL Editor* (ou demandez-le-moi) :
 
 ```sql
@@ -100,6 +102,19 @@ on conflict (user_id) do update set premium = true, source = 'manual', expires_a
 ```
 
 Pour les tests d'achat : *Sandbox testers* dans App Store Connect, *License testing* dans la Play Console, *mode test* dans Stripe.
+
+## 5 bis. Offrir des accès avec des codes (FRIEND2026)
+
+Chaque code est **unique et à usage unique**, au format `FRIEND2026-XXXXXX`. Il est **limité à 50 codes**, et un code non utilisé **expire au bout de 60 jours**.
+
+- **Créer un code** : dans l'app, *Compte → Gérer les codes d'accès* (visible uniquement pour les adresses e-mail déclarées comme éditrices). Choisissez pour qui (une note pour vous) et la durée de l'accès : 1, 3 ou 6 mois, 1 an, ou sans date de fin. Les boutons **Copier** et **Message à envoyer** préparent le texte à transmettre.
+- **Utiliser un code** : la personne crée son compte avec son e-mail, puis *Compte → J'ai un code d'accès*. Premium s'active aussitôt, sur tous ses appareils. L'écran de gestion indique qui a utilisé chaque code (son e-mail), quand, et jusqu'à quand court son accès.
+- **Déclarer une éditrice** (dans Supabase → *SQL Editor*) :
+  ```sql
+  insert into private.admins (email) values ('votre@adresse.fr');
+  ```
+- Les accès offerts sont enregistrés à part des abonnements payés : un achat ou une résiliation dans une boutique ne les efface jamais.
+- Supabase met en pause un projet gratuit après 7 jours sans activité. La réactivation se fait en un clic dans le tableau de bord (*Restore project*) et prend quelques minutes. Une fois l'app en ligne et utilisée, cela n'arrive plus.
 
 ## 6. Règles des boutiques déjà respectées
 

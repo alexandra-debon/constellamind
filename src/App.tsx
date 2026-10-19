@@ -1,6 +1,6 @@
 import type { PremiumFeature } from './account';
 import { Onboarding } from './components/Onboarding';
-import { AccountPage, ConstellationsPage, PremiumPage } from './pages/Account';
+import { AccountPage, CodesAdminPage, ConstellationsPage, PremiumPage } from './pages/Account';
 import { SyncAgent } from './sync';
 import { isValidAddress, isStar } from './model';
 import ActionsBoard from './pages/Actions';
@@ -50,6 +50,8 @@ function Screen() {
       return <AccountPage />;
     case 'constellations':
       return <ConstellationsPage />;
+    case 'codes':
+      return <CodesAdminPage />;
   }
   return <Core />;
 }
